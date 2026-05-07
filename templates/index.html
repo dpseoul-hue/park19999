@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>일정표</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="no-print toolbar">
+    <button onclick="window.print()">🖨️ 인쇄</button>
+  </div>
+
+  <div class="page">
+    <div class="header-grid">
+      <div class="title-block">
+        <h1>일 정 표</h1>
+        <p class="date">{{ data.date }}</p>
+      </div>
+      <div class="stamp-grid">
+        <div class="stamp-row labels">
+          <div>담 당</div><div>팀 장</div><div>과 장</div>
+        </div>
+        <div class="stamp-row boxes">
+          <div></div><div></div><div></div>
+        </div>
+        <div class="stamp-row decision">
+          <div></div><div colspan="2">전결</div>
+        </div>
+      </div>
+    </div>
+
+    <p class="team-info">
+      ○ 반 : {{ data.team }}(실태확인원&nbsp;&nbsp;
+      {% for o in data.officials %}{{ o }}(인){% if not loop.last %}, {% endif %}{% endfor %})
+    </p>
+
+    <table>
+      <thead>
+        <tr>
+          <th rowspan="2" class="col-order">방문<br>순서</th>
+          <th rowspan="2" class="col-name">체납자</th>
+          <th rowspan="2" class="col-addr">주소</th>
+          <th>도착시간</th>
+          <th>상담시간</th>
+          <th>출발시간</th>
+          <th rowspan="2" class="col-remark">비 고</th>
+        </tr>
+        <tr>
+          <th class="subhead">(시·분)</th>
+          <th class="subhead">(시·분)</th>
+          <th class="subhead">(시·분)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for v in data.visits %}
+        <tr data-idx="{{ loop.index0 }}">
+          <td class="center">{{ v.order if v.name else '' }}</td>
+          <td class="center name-cell">
+            {{ v.name }}
+            {% if v.note_name %}<br><span class="sub-note">{{ v.note_name }}</span>{% endif %}
+          </td>
+          <td class="addr-cell">{{ v.address }}</td>
+          <td class="center time-cell" data-field="arrive">{{ v.arrive }}</td>
+          <td class="center time-cell" data-field="consult">{{ v.consult }}</td>
+          <td class="center time-cell" data-field="depart">{{ v.depart }}</td>
+          <td class="center remark-cell" data-field="remark">
+            <select class="remark-select no-print" onchange="saveField({{ loop.index0 }}, 'remark', this.value)">
+              <option value="">-</option>
+              {% for opt in ['부재중','전화번호 상이','착신정지','전원off','전화번호 불명','면담완료'] %}
+              <option value="{{ opt }}" {% if v.remark == opt %}selected{% endif %}>{{ opt }}</option>
+              {% endfor %}
+              <option value="__custom__" {% if v.remark and v.remark not in ['부재중','전화번호 상이','착신정지','전원off','전화번호 불명','면담완료'] %}selected{% endif %}>직접입력</option>
+            </select>
+            <span class="remark-text print-only">{{ v.remark }}</span>
+            <input type="text" class="remark-input no-print hidden"
+              placeholder="직접 입력"
+              value="{% if v.remark and v.remark not in ['부재중','전화번호 상이','착신정지','전원off','전화번호 불명','면담완료'] %}{{ v.remark }}{% endif %}"
+              onchange="saveField({{ loop.index0 }}, 'remark', this.value)">
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <p class="footer">서울지방국세청장 귀하</p>
+  </div>
+
+  <script>
+    const REMARK_PRESETS = ['부재중','전화번호 상이','착신정지','전원off','전화번호 불명','면담완료'];
+
+    // 시간 셀 클릭 → inline 편집
+    document.querySelectorAll('.time-cell').forEach(cell => {
+      cell.addEventListener('click', function () {
+        if (this.querySelector('input')) return;
+        const cur = this.textContent.trim();
+        const idx = this.closest('tr').dataset.idx;
+        const field = this.dataset.field;
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'time-input';
+        input.value = cur;
+        input.placeholder = '00:00';
+        this.textContent = '';
+        this.appendChild(input);
+        input.focus();
+        input.addEventListener('blur', () => {
+          saveField(idx, field, input.value.trim());
+          cell.textContent = input.value.trim();
+        });
+        input.addEventListener('keydown', e => {
+          if (e.key === 'Enter') input.blur();
+          if (e.key === 'Escape') { cell.textContent = cur; }
+        });
+      });
+    });
+
+    // 비고 select 변경 처리
+    document.querySelectorAll('.remark-select').forEach(sel => {
+      sel.addEventListener('change', function () {
+        const idx = this.closest('tr').dataset.idx;
+        const customInput = this.closest('td').querySelector('.remark-input');
+        const textSpan = this.closest('td').querySelector('.remark-text');
+        if (this.value === '__custom__') {
+          customInput.classList.remove('hidden');
+          customInput.focus();
+        } else {
+          customInput.classList.add('hidden');
+          customInput.value = '';
+          textSpan.textContent = this.value;
+          saveField(idx, 'remark', this.value);
+        }
+      });
+      // 초기 상태 처리
+      const td = sel.closest('td');
+      const customInput = td.querySelector('.remark-input');
+      const cur = sel.value;
+      if (cur === '__custom__') {
+        customInput.classList.remove('hidden');
+      }
+    });
+
+    async function saveField(idx, field, value) {
+      await fetch(`/api/update/${idx}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ [field]: value })
+      });
+    }
+  </script>
+</body>
+</html>
