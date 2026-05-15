@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0a0e14">
+<title>실태확인 출장 - 무료주차장 매칭</title>
+<style>
+:root {
+  --bg: #0a0e14;
+  --surface: #131922;
+  --surface-2: #1a2230;
+  --border: #232d3f;
+  --text: #e6edf3;
+  --text-dim: #8a96a8;
+  --accent: #58d68d;
+  --accent-2: #5dade2;
+  --warn: #f7c873;
+  --danger: #e74c3c;
+  --tag-24h: #2ecc71;
+  --tag-free: #3498db;
+  --tag-holiday: #9b59b6;
+  --tag-limit: #95a5a6;
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body {
+  margin: 0; padding: 0;
+  background: var(--bg); color: var(--text);
+  font-family: -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", "맑은 고딕", sans-serif;
+  font-size: 15px; line-height: 1.5;
+}
+.wrap { max-width: 720px; margin: 0 auto; padding: 16px 14px 80px; }
+header {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 14px; margin-bottom: 16px;
+}
+.nav-back {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-size: 12px; color: var(--text-dim);
+  text-decoration: none; margin-bottom: 10px;
+}
+.nav-back:hover { color: var(--text); }
+h1 { margin: 0 0 4px; font-size: 19px; font-weight: 700; }
+.sub { font-size: 12px; color: var(--text-dim); }
+
+.input-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 14px;
+}
+label {
+  display: block; font-size: 12px; font-weight: 600;
+  color: var(--text-dim); margin-bottom: 6px;
+  text-transform: uppercase; letter-spacing: 0.5px;
+}
+textarea {
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 12px;
+  border-radius: 7px;
+  font-size: 14px;
+  font-family: inherit;
+  min-height: 130px;
+  resize: vertical;
+  line-height: 1.6;
+}
+textarea:focus { outline: none; border-color: var(--accent-2); }
+.controls {
+  display: flex; gap: 8px; margin-top: 10px;
+  align-items: center; flex-wrap: wrap;
+}
+.controls label.inline {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 12px; color: var(--text-dim);
+  text-transform: none; letter-spacing: 0;
+  margin: 0; cursor: pointer;
+}
+.controls select {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 5px 8px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-family: inherit;
+}
+.btn-run {
+  padding: 8px 16px;
+  background: var(--accent);
+  color: #0a0e14;
+  border: none; border-radius: 7px;
+  font-size: 14px; font-weight: 700;
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+.btn-run:active { opacity: 0.8; }
+.btn-clear {
+  padding: 8px 12px;
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.hint {
+  font-size: 11px; color: var(--text-dim);
+  margin-top: 8px; line-height: 1.5;
+}
+
+.visit-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.visit-head {
+  padding: 12px 14px;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.visit-num {
+  flex: 0 0 auto;
+  width: 26px; height: 26px;
+  background: var(--accent-2);
+  color: #0a0e14;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 13px;
+}
+.visit-info { flex: 1; min-width: 0; }
+.visit-addr {
+  font-weight: 600; font-size: 14px; color: var(--text);
+  word-break: keep-all; line-height: 1.4;
+}
+.visit-meta {
+  font-size: 11px; color: var(--text-dim);
+  margin-top: 3px;
+}
+.visit-meta b { color: var(--warn); font-weight: 600; }
+.visit-actions {
+  margin-top: 6px; display: flex; gap: 6px;
+}
+.mini-btn {
+  font-size: 11px;
+  padding: 4px 8px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  border-radius: 5px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.mini-btn:hover { color: var(--text); }
+
+.matches {
+  padding: 4px 0;
+}
+.no-match {
+  padding: 18px 14px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.lot {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.lot:last-child { border-bottom: none; }
+.lot-head {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  gap: 10px; margin-bottom: 4px;
+}
+.lot-name {
+  font-weight: 600; font-size: 14px;
+  display: flex; align-items: center; gap: 6px;
+}
+.match-badge {
+  font-size: 9px;
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+.match-dong { background: rgba(88,214,141,0.18); color: var(--accent); }
+.match-gu { background: rgba(247,200,115,0.15); color: var(--warn); }
+.lot-cap {
+  font-size: 11px; color: var(--text-dim);
+  white-space: nowrap; font-variant-numeric: tabular-nums;
+}
+.lot-cap b { color: var(--accent); }
+.lot-addr {
+  font-size: 12px; color: var(--text-dim);
+  margin-bottom: 5px;
+}
+.lot-tags { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 6px; }
+.tag {
+  font-size: 10px; font-weight: 600;
+  padding: 1px 6px; border-radius: 7px;
+}
+.tag-mode-24시간 { background: rgba(46,204,113,0.15); color: var(--tag-24h); }
+.tag-mode-상시무료 { background: rgba(52,152,219,0.15); color: var(--tag-free); }
+.tag-mode-공휴일무료 { background: rgba(155,89,182,0.15); color: var(--tag-holiday); }
+.tag-mode-제한운영 { background: rgba(149,165,166,0.15); color: var(--tag-limit); }
+.tag-type { background: var(--surface-2); color: var(--text-dim); }
+.lot-hours {
+  font-size: 11px; color: var(--text-dim);
+  margin-bottom: 6px;
+  font-variant-numeric: tabular-nums;
+}
+.lot-hours span { margin-right: 10px; }
+.lot-hours b { color: var(--text); font-weight: 500; }
+.lot-map {
+  display: inline-block;
+  font-size: 11px; font-weight: 600;
+  padding: 5px 10px;
+  background: var(--accent-2);
+  color: #0a0e14;
+  border-radius: 5px;
+  text-decoration: none;
+}
+
+.summary {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 14px;
+  font-size: 12px;
+}
+.summary-row {
+  display: flex; justify-content: space-between;
+  padding: 3px 0; color: var(--text-dim);
+}
+.summary-row b { color: var(--text); font-weight: 600; }
+
+.toast {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  background: var(--accent); color: #0a0e14;
+  padding: 10px 18px; border-radius: 20px;
+  font-size: 13px; font-weight: 600;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s; z-index: 200;
+}
+.toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <a class="nav-back" href="/">← 일정표로 돌아가기</a>
+    <h1>🅿️ 실태확인 출장 무료주차장 매칭</h1>
+    <div class="sub">방문지 주소 → 인근 면제주차장 자동 매칭 (동 우선 → 구 차순)</div>
+  </header>
+
+  <div class="input-card">
+    <label>방문지 주소 (한 줄에 하나)</label>
+    <textarea id="inputAddr" placeholder="예시:
+송파구 신천동 7-19
+강남구 역삼동 822-3
+중구 을지로3가 282
+종로구 종로5가"></textarea>
+    <div class="controls">
+      <button class="btn-run" id="runBtn">매칭 실행</button>
+      <button class="btn-clear" id="clearBtn">지우기</button>
+      <label class="inline">
+        <input type="checkbox" id="only24" checked> 24시간/상시무료 우선
+      </label>
+      <label class="inline">
+        결과 수:
+        <select id="topN">
+          <option value="3">3</option>
+          <option value="5" selected>5</option>
+          <option value="10">10</option>
+        </select>
+      </label>
+    </div>
+    <div class="hint">
+      • 동까지 적힌 주소는 같은 동 → 같은 구 순으로 매칭<br>
+      • 도로명 주소(예: "테헤란로 123")는 구 단위로만 매칭<br>
+      • 결과 카드의 "카카오맵" 버튼은 카카오 내비 연동 가능
+    </div>
+  </div>
+
+  <div id="output"></div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const PARKING=[{"id":1,"name":"개화산역","addr":"강서구 방화동 845","gu":"강서구","dong":"방화동","type":"노외","cap":320,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EA%B0%9C%ED%99%94%EC%82%B0%EC%97%AD%20%EA%B0%95%EC%84%9C%EA%B5%AC%20%EB%B0%A9%ED%99%94%EB%8F%99%20845"},{"id":2,"name":"개화역","addr":"강서구 개화동로8길 17","gu":"강서구","dong":"","type":"노외(시설)","cap":483,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EA%B0%9C%ED%99%94%EC%97%AD%20%EA%B0%95%EC%84%9C%EA%B5%AC%20%EA%B0%9C%ED%99%94%EB%8F%99%EB%A1%9C8%EA%B8%B8%2017"},{"id":3,"name":"구로디지털단지역","addr":"구로구 도림천로 477","gu":"구로구","dong":"","type":"노외","cap":91,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EA%B5%AC%EB%A1%9C%EB%94%94%EC%A7%80%ED%84%B8%EB%8B%A8%EC%A7%80%EC%97%AD%20%EA%B5%AC%EB%A1%9C%EA%B5%AC%20%EB%8F%84%EB%A6%BC%EC%B2%9C%EB%A1%9C%20477"},{"id":4,"name":"구파발역","addr":"은평구 진관동 66-30","gu":"은평구","dong":"진관동","type":"노외(시설)","cap":399,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EA%B5%AC%ED%8C%8C%EB%B0%9C%EC%97%AD%20%EC%9D%80%ED%8F%89%EA%B5%AC%20%EC%A7%84%EA%B4%80%EB%8F%99%2066-30"},{"id":5,"name":"가양라이품","addr":"강서구 가양동 1457-1","gu":"강서구","dong":"가양동","type":"노외(시설)","cap":38,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EA%B0%80%EC%96%91%EB%9D%BC%EC%9D%B4%ED%92%88%20%EA%B0%95%EC%84%9C%EA%B5%AC%20%EA%B0%80%EC%96%91%EB%8F%99%201457-1"},{"id":6,"name":"도봉산역","addr":"도봉구 도봉동 288-19","gu":"도봉구","dong":"도봉동","type":"노외(시설)","cap":358,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EB%8F%84%EB%B4%89%EC%82%B0%EC%97%AD%20%EB%8F%84%EB%B4%89%EA%B5%AC%20%EB%8F%84%EB%B4%89%EB%8F%99%20288-19"},{"id":7,"name":"동구로","addr":"구로구 가마산로 26길 27","gu":"구로구","dong":"","type":"노외(시설)","cap":70,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EB%8F%99%EA%B5%AC%EB%A1%9C%20%EA%B5%AC%EB%A1%9C%EA%B5%AC%20%EA%B0%80%EB%A7%88%EC%82%B0%EB%A1%9C%2026%EA%B8%B8%2027"},{"id":8,"name":"동대문","addr":"중구 신당동 251-7","gu":"중구","dong":"신당동","type":"노외(시설)","cap":1090,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EB%8F%99%EB%8C%80%EB%AC%B8%20%EC%A4%91%EA%B5%AC%20%EC%8B%A0%EB%8B%B9%EB%8F%99%20251-7"},{"id":9,"name":"복정역","addr":"송파구 장지동 600-2","gu":"송파구","dong":"장지동","type":"노외","cap":362,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EB%B3%B5%EC%A0%95%EC%97%AD%20%EC%86%A1%ED%8C%8C%EA%B5%AC%20%EC%9E%A5%EC%A7%80%EB%8F%99%20600-2"},{"id":10,"name":"사당노외","addr":"서초구 방배동 507-1","gu":"서초구","dong":"방배동","type":"노외","cap":183,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EC%82%AC%EB%8B%B9%EB%85%B8%EC%99%B8%20%EC%84%9C%EC%B4%88%EA%B5%AC%20%EB%B0%A9%EB%B0%B0%EB%8F%99%20507-1"},{"id":11,"name":"서울글로벌센터","addr":"종로구 서린동 63","gu":"종로구","dong":"서린동","type":"노외(시설)","cap":44,"wd":"09:00~18:00","sat":"폐쇄","hol":"폐쇄","mode":"제한운영","map":"https://map.kakao.com/?q=%EC%84%9C%EC%9A%B8%EA%B8%80%EB%A1%9C%EB%B2%8C%EC%84%BC%ED%84%B0%20%EC%A2%85%EB%A1%9C%EA%B5%AC%20%EC%84%9C%EB%A6%B0%EB%8F%99%2063"},{"id":12,"name":"세종로","addr":"종로구 세종로 80-1(지하)","gu":"종로구","dong":"","type":"노외(시설)","cap":1260,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EC%84%B8%EC%A2%85%EB%A1%9C%20%EC%A2%85%EB%A1%9C%EA%B5%AC%20%EC%84%B8%EC%A2%85%EB%A1%9C%2080-1%28%EC%A7%80%ED%95%98%29"},{"id":13,"name":"수서역","addr":"강남구 수서동 735(북)","gu":"강남구","dong":"수서동","type":"노외","cap":561,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EC%88%98%EC%84%9C%EC%97%AD%20%EA%B0%95%EB%82%A8%EA%B5%AC%20%EC%88%98%EC%84%9C%EB%8F%99%20735%28%EB%B6%81%29"},{"id":14,"name":"신대방역","addr":"관악구 신림동 498","gu":"관악구","dong":"신림동","type":"노외","cap":60,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EC%8B%A0%EB%8C%80%EB%B0%A9%EC%97%AD%20%EA%B4%80%EC%95%85%EA%B5%AC%20%EC%8B%A0%EB%A6%BC%EB%8F%99%20498"},{"id":15,"name":"신방화역","addr":"강서구 마곡동 739","gu":"강서구","dong":"마곡동","type":"노외(시설)","cap":198,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EC%8B%A0%EB%B0%A9%ED%99%94%EC%97%AD%20%EA%B0%95%EC%84%9C%EA%B5%AC%20%EB%A7%88%EA%B3%A1%EB%8F%99%20739"},{"id":16,"name":"신설동","addr":"동대문구 신설동 114-29","gu":"동대문구","dong":"신설동","type":"노외","cap":79,"wd":"09:00~19:00","sat":"09:00~19:00","hol":"09:00~19:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EC%8B%A0%EC%84%A4%EB%8F%99%20%EB%8F%99%EB%8C%80%EB%AC%B8%EA%B5%AC%20%EC%8B%A0%EC%84%A4%EB%8F%99%20114-29"},{"id":17,"name":"신월4동","addr":"양천구 신월동 411-1(국회대로 28)","gu":"양천구","dong":"신월동","type":"노외(시설)","cap":46,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EC%8B%A0%EC%9B%944%EB%8F%99%20%EC%96%91%EC%B2%9C%EA%B5%AC%20%EC%8B%A0%EC%9B%94%EB%8F%99%20411-1%28%EA%B5%AD%ED%9A%8C%EB%8C%80%EB%A1%9C%2028%29"},{"id":18,"name":"신천유수지","addr":"송파구 신천동 14(송파구 오금로1)","gu":"송파구","dong":"신천동","type":"노외","cap":192,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EC%8B%A0%EC%B2%9C%EC%9C%A0%EC%88%98%EC%A7%80%20%EC%86%A1%ED%8C%8C%EA%B5%AC%20%EC%8B%A0%EC%B2%9C%EB%8F%99%2014%28%EC%86%A1%ED%8C%8C%EA%B5%AC%20%EC%98%A4%EA%B8%88%EB%A1%9C1%29"},{"id":19,"name":"볕우물","addr":"강동구 암사1동 473-3(고덕로24길 50)","gu":"강동구","dong":"암사1동","type":"노외(시설)","cap":96,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EB%B3%95%EC%9A%B0%EB%AC%BC%20%EA%B0%95%EB%8F%99%EA%B5%AC%20%EC%95%94%EC%82%AC1%EB%8F%99%20473-3%28%EA%B3%A0%EB%8D%95%EB%A1%9C24%EA%B8%B8%2050%29"},{"id":20,"name":"영등포구청역","addr":"영등포구 당산동3가 370-3","gu":"영등포구","dong":"","type":"노외(시설)","cap":137,"wd":"05:00~익일01:00","sat":"05:00~익일01:00","hol":"05:00~익일01:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EC%98%81%EB%93%B1%ED%8F%AC%EA%B5%AC%EC%B2%AD%EC%97%AD%20%EC%98%81%EB%93%B1%ED%8F%AC%EA%B5%AC%20%EB%8B%B9%EC%82%B0%EB%8F%993%EA%B0%80%20370-3"},{"id":21,"name":"용산주차빌딩","addr":"용산구 한강로2가 12-9","gu":"용산구","dong":"","type":"노외(시설)","cap":559,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EC%9A%A9%EC%82%B0%EC%A3%BC%EC%B0%A8%EB%B9%8C%EB%94%A9%20%EC%9A%A9%EC%82%B0%EA%B5%AC%20%ED%95%9C%EA%B0%95%EB%A1%9C2%EA%B0%80%2012-9"},{"id":22,"name":"웃우물","addr":"양천구 신정동 943-25","gu":"양천구","dong":"신정동","type":"노외(시설)","cap":79,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EC%9B%83%EC%9A%B0%EB%AC%BC%20%EC%96%91%EC%B2%9C%EA%B5%AC%20%EC%8B%A0%EC%A0%95%EB%8F%99%20943-25"},{"id":23,"name":"일원터널","addr":"강남구 일원동 722-2","gu":"강남구","dong":"일원동","type":"노외","cap":11,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EC%9D%BC%EC%9B%90%ED%84%B0%EB%84%90%20%EA%B0%95%EB%82%A8%EA%B5%AC%20%EC%9D%BC%EC%9B%90%EB%8F%99%20722-2"},{"id":24,"name":"잠실역","addr":"송파구 신천동 27(지하)","gu":"송파구","dong":"신천동","type":"노외(시설)","cap":357,"wd":"05:00~익일01:00","sat":"05:00~익일01:00","hol":"05:00~익일01:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EC%9E%A0%EC%8B%A4%EC%97%AD%20%EC%86%A1%ED%8C%8C%EA%B5%AC%20%EC%8B%A0%EC%B2%9C%EB%8F%99%2027%28%EC%A7%80%ED%95%98%29"},{"id":25,"name":"장안1동","addr":"동대문구 답십리로66길 75(장안동)","gu":"동대문구","dong":"","type":"노외(시설)","cap":71,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EC%9E%A5%EC%95%881%EB%8F%99%20%EB%8F%99%EB%8C%80%EB%AC%B8%EA%B5%AC%20%EB%8B%B5%EC%8B%AD%EB%A6%AC%EB%A1%9C66%EA%B8%B8%2075%28%EC%9E%A5%EC%95%88%EB%8F%99%29"},{"id":26,"name":"장안2동","addr":"동대문구 장안동 286-9","gu":"동대문구","dong":"장안동","type":"노외(시설)","cap":80,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EC%9E%A5%EC%95%882%EB%8F%99%20%EB%8F%99%EB%8C%80%EB%AC%B8%EA%B5%AC%20%EC%9E%A5%EC%95%88%EB%8F%99%20286-9"},{"id":27,"name":"종묘","addr":"종로구 훈정동 2","gu":"종로구","dong":"훈정동","type":"노외(시설)","cap":1312,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EC%A2%85%EB%AC%98%20%EC%A2%85%EB%A1%9C%EA%B5%AC%20%ED%9B%88%EC%A0%95%EB%8F%99%202"},{"id":28,"name":"중곡1동","addr":"광진구 중곡1동 230-12(면목로 126)","gu":"광진구","dong":"중곡1동","type":"노외(시설)","cap":130,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EC%A4%91%EA%B3%A11%EB%8F%99%20%EA%B4%91%EC%A7%84%EA%B5%AC%20%EC%A4%91%EA%B3%A11%EB%8F%99%20230-12%28%EB%A9%B4%EB%AA%A9%EB%A1%9C%20126%29"},{"id":29,"name":"천왕역","addr":"구로구 천왕동 14-38(오리로1156)","gu":"구로구","dong":"천왕동","type":"노외(시설)","cap":327,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EC%B2%9C%EC%99%95%EC%97%AD%20%EA%B5%AC%EB%A1%9C%EA%B5%AC%20%EC%B2%9C%EC%99%95%EB%8F%99%2014-38%28%EC%98%A4%EB%A6%AC%EB%A1%9C1156%29"},{"id":30,"name":"천호역","addr":"강동구 천호동 455(천호대로 997)","gu":"강동구","dong":"천호동","type":"노외(시설)","cap":1431,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EC%B2%9C%ED%98%B8%EC%97%AD%20%EA%B0%95%EB%8F%99%EA%B5%AC%20%EC%B2%9C%ED%98%B8%EB%8F%99%20455%28%EC%B2%9C%ED%98%B8%EB%8C%80%EB%A1%9C%20997%29"},{"id":31,"name":"학여울역","addr":"강남구 대치동 514(남부순환로 3104)","gu":"강남구","dong":"대치동","type":"노외(시설)","cap":180,"wd":"05:00~익일01:00","sat":"05:00~익일01:00","hol":"05:00~익일01:00","mode":"제한운영","map":"https://map.kakao.com/?q=%ED%95%99%EC%97%AC%EC%9A%B8%EC%97%AD%20%EA%B0%95%EB%82%A8%EA%B5%AC%20%EB%8C%80%EC%B9%98%EB%8F%99%20514%28%EB%82%A8%EB%B6%80%EC%88%9C%ED%99%98%EB%A1%9C%203104%29"},{"id":32,"name":"한강진역","addr":"용산구 한남동 산10-84(728-27)","gu":"용산구","dong":"한남동","type":"노외","cap":174,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%ED%95%9C%EA%B0%95%EC%A7%84%EC%97%AD%20%EC%9A%A9%EC%82%B0%EA%B5%AC%20%ED%95%9C%EB%82%A8%EB%8F%99%20%EC%82%B010-84%28728-27%29"},{"id":33,"name":"훈련원공원","addr":"중구 을지로5가 40-3","gu":"중구","dong":"","type":"노외(시설)","cap":873,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%ED%9B%88%EB%A0%A8%EC%9B%90%EA%B3%B5%EC%9B%90%20%EC%A4%91%EA%B5%AC%20%EC%9D%84%EC%A7%80%EB%A1%9C5%EA%B0%80%2040-3"},{"id":34,"name":"양재역","addr":"서초구 양재동 23","gu":"서초구","dong":"양재동","type":"노외(시설)","cap":894,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EC%96%91%EC%9E%AC%EC%97%AD%20%EC%84%9C%EC%B4%88%EA%B5%AC%20%EC%96%91%EC%9E%AC%EB%8F%99%2023"},{"id":35,"name":"DDP동측(양쪽)","addr":"중구 을지로(마장로22)","gu":"중구","dong":"","type":"노상","cap":16,"wd":"무료개방","sat":"무료개방","hol":"무료개방","mode":"상시무료","map":"https://map.kakao.com/?q=DDP%EB%8F%99%EC%B8%A1%28%EC%96%91%EC%AA%BD%29%20%EC%A4%91%EA%B5%AC%20%EC%9D%84%EC%A7%80%EB%A1%9C%28%EB%A7%88%EC%9E%A5%EB%A1%9C22%29"},{"id":36,"name":"남대문 시장","addr":"중구 남창동 51-4 일대","gu":"중구","dong":"남창동","type":"노상","cap":2,"wd":"무료개방","sat":"무료개방","hol":"무료개방","mode":"상시무료","map":"https://map.kakao.com/?q=%EB%82%A8%EB%8C%80%EB%AC%B8%20%EC%8B%9C%EC%9E%A5%20%EC%A4%91%EA%B5%AC%20%EB%82%A8%EC%B0%BD%EB%8F%99%2051-4"},{"id":37,"name":"남대문 초입","addr":"중구 남창동 51-4 일대","gu":"중구","dong":"남창동","type":"노상","cap":3,"wd":"무료개방","sat":"무료개방","hol":"무료개방","mode":"상시무료","map":"https://map.kakao.com/?q=%EB%82%A8%EB%8C%80%EB%AC%B8%20%EC%B4%88%EC%9E%85%20%EC%A4%91%EA%B5%AC%20%EB%82%A8%EC%B0%BD%EB%8F%99%2051-4"},{"id":38,"name":"남산공원 소월로","addr":"용산구 소월길","gu":"용산구","dong":"","type":"노상","cap":12,"wd":"무료개방","sat":"무료개방","hol":"무료개방","mode":"상시무료","map":"https://map.kakao.com/?q=%EB%82%A8%EC%82%B0%EA%B3%B5%EC%9B%90%20%EC%86%8C%EC%9B%94%EB%A1%9C%20%EC%9A%A9%EC%82%B0%EA%B5%AC%20%EC%86%8C%EC%9B%94%EA%B8%B8"},{"id":39,"name":"남산공원 소파로","addr":"중구 남창동 205-107 일대","gu":"중구","dong":"남창동","type":"노상","cap":21,"wd":"무료개방","sat":"무료개방","hol":"무료개방","mode":"상시무료","map":"https://map.kakao.com/?q=%EB%82%A8%EC%82%B0%EA%B3%B5%EC%9B%90%20%EC%86%8C%ED%8C%8C%EB%A1%9C%20%EC%A4%91%EA%B5%AC%20%EB%82%A8%EC%B0%BD%EB%8F%99%20205-107"},{"id":40,"name":"남산예장","addr":"중구 퇴계로26길 36","gu":"중구","dong":"","type":"노외(시설)","cap":39,"wd":"06:00~24:00","sat":"06:00~24:00","hol":"06:00~24:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EB%82%A8%EC%82%B0%EC%98%88%EC%9E%A5%20%EC%A4%91%EA%B5%AC%20%ED%87%B4%EA%B3%84%EB%A1%9C26%EA%B8%B8%2036"},{"id":41,"name":"동순라길(종묘)","addr":"종로구 인의동 112-10 일대","gu":"종로구","dong":"인의동","type":"노상","cap":5,"wd":"무료개방","sat":"무료개방","hol":"무료개방","mode":"상시무료","map":"https://map.kakao.com/?q=%EB%8F%99%EC%88%9C%EB%9D%BC%EA%B8%B8%28%EC%A2%85%EB%AC%98%29%20%EC%A2%85%EB%A1%9C%EA%B5%AC%20%EC%9D%B8%EC%9D%98%EB%8F%99%20112-10"},{"id":42,"name":"소파로케이블카앞","addr":"중구 회현동1가 산1-15","gu":"중구","dong":"","type":"노상","cap":2,"wd":"무료개방","sat":"무료개방","hol":"무료개방","mode":"상시무료","map":"https://map.kakao.com/?q=%EC%86%8C%ED%8C%8C%EB%A1%9C%EC%BC%80%EC%9D%B4%EB%B8%94%EC%B9%B4%EC%95%9E%20%EC%A4%91%EA%B5%AC%20%ED%9A%8C%ED%98%84%EB%8F%991%EA%B0%80%20%EC%82%B01-15"},{"id":43,"name":"장충단로(한남광장)","addr":"용산구 한남동 산9-19","gu":"용산구","dong":"한남동","type":"노상","cap":5,"wd":"무료개방","sat":"무료개방","hol":"무료개방","mode":"상시무료","map":"https://map.kakao.com/?q=%EC%9E%A5%EC%B6%A9%EB%8B%A8%EB%A1%9C%28%ED%95%9C%EB%82%A8%EA%B4%91%EC%9E%A5%29%20%EC%9A%A9%EC%82%B0%EA%B5%AC%20%ED%95%9C%EB%82%A8%EB%8F%99%20%EC%82%B09-19"},{"id":44,"name":"탑골공원","addr":"종로구 종로2가 38-4(대학로5길 97)","gu":"종로구","dong":"","type":"노상","cap":2,"wd":"무료개방","sat":"무료개방","hol":"무료개방","mode":"상시무료","map":"https://map.kakao.com/?q=%ED%83%91%EA%B3%A8%EA%B3%B5%EC%9B%90%20%EC%A2%85%EB%A1%9C%EA%B5%AC%20%EC%A2%85%EB%A1%9C2%EA%B0%80%2038-4"},{"id":45,"name":"진흥로","addr":"은평구 역촌동 41-8","gu":"은평구","dong":"역촌동","type":"노상","cap":14,"wd":"09:00~18:00","sat":"무료개방","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EC%A7%84%ED%9D%A5%EB%A1%9C%20%EC%9D%80%ED%8F%89%EA%B5%AC%20%EC%97%AD%EC%B4%8C%EB%8F%99%2041-8"},{"id":46,"name":"가양3동","addr":"강서구 가양동 1488-12","gu":"강서구","dong":"가양동","type":"노외","cap":56,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EA%B0%80%EC%96%913%EB%8F%99%20%EA%B0%95%EC%84%9C%EA%B5%AC%20%EA%B0%80%EC%96%91%EB%8F%99%201488-12"},{"id":47,"name":"목동체비지","addr":"양천구 목동 908-26","gu":"양천구","dong":"목동","type":"노외","cap":55,"wd":"08:00~21:00","sat":"08:00~21:00","hol":"08:00~21:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EB%AA%A9%EB%8F%99%EC%B2%B4%EB%B9%84%EC%A7%80%20%EC%96%91%EC%B2%9C%EA%B5%AC%20%EB%AA%A9%EB%8F%99%20908-26"},{"id":48,"name":"방화역(동)","addr":"강서구 방화동 830-4","gu":"강서구","dong":"방화동","type":"노외","cap":67,"wd":"08:00~21:00","sat":"08:00~21:00","hol":"08:00~21:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EB%B0%A9%ED%99%94%EC%97%AD%28%EB%8F%99%29%20%EA%B0%95%EC%84%9C%EA%B5%AC%20%EB%B0%A9%ED%99%94%EB%8F%99%20830-4"},{"id":49,"name":"방화역(서)","addr":"강서구 방화동 829-1","gu":"강서구","dong":"방화동","type":"노외","cap":69,"wd":"08:00~21:00","sat":"08:00~21:00","hol":"08:00~21:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EB%B0%A9%ED%99%94%EC%97%AD%28%EC%84%9C%29%20%EA%B0%95%EC%84%9C%EA%B5%AC%20%EB%B0%A9%ED%99%94%EB%8F%99%20829-1"},{"id":50,"name":"가양역","addr":"강서구 가양동 1480-10","gu":"강서구","dong":"가양동","type":"노외","cap":79,"wd":"08:00~21:00","sat":"08:00~21:00","hol":"08:00~21:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EA%B0%80%EC%96%91%EC%97%AD%20%EA%B0%95%EC%84%9C%EA%B5%AC%20%EA%B0%80%EC%96%91%EB%8F%99%201480-10"},{"id":51,"name":"대림역2","addr":"구로구 구로동 73-9","gu":"구로구","dong":"구로동","type":"노상","cap":31,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EB%8C%80%EB%A6%BC%EC%97%AD2%20%EA%B5%AC%EB%A1%9C%EA%B5%AC%20%EA%B5%AC%EB%A1%9C%EB%8F%99%2073-9"},{"id":52,"name":"가마산고가밑","addr":"구로구 구로동 414-13","gu":"구로구","dong":"구로동","type":"노상","cap":18,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EA%B0%80%EB%A7%88%EC%82%B0%EA%B3%A0%EA%B0%80%EB%B0%91%20%EA%B5%AC%EB%A1%9C%EA%B5%AC%20%EA%B5%AC%EB%A1%9C%EB%8F%99%20414-13"},{"id":53,"name":"가산동 금천교","addr":"금천구 가산동 677","gu":"금천구","dong":"가산동","type":"노상","cap":37,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EA%B0%80%EC%82%B0%EB%8F%99%20%EA%B8%88%EC%B2%9C%EA%B5%90%20%EA%B8%88%EC%B2%9C%EA%B5%AC%20%EA%B0%80%EC%82%B0%EB%8F%99%20677"},{"id":54,"name":"구로디지털단지역(상)","addr":"관악구 신림동 1677-4","gu":"관악구","dong":"신림동","type":"노외","cap":31,"wd":"08:00~21:00","sat":"08:00~21:00","hol":"08:00~21:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EA%B5%AC%EB%A1%9C%EB%94%94%EC%A7%80%ED%84%B8%EB%8B%A8%EC%A7%80%EC%97%AD%28%EC%83%81%29%20%EA%B4%80%EC%95%85%EA%B5%AC%20%EC%8B%A0%EB%A6%BC%EB%8F%99%201677-4"},{"id":55,"name":"독산동 금천교","addr":"금천구 독산동 1081-4","gu":"금천구","dong":"독산동","type":"노상","cap":21,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EB%8F%85%EC%82%B0%EB%8F%99%20%EA%B8%88%EC%B2%9C%EA%B5%90%20%EA%B8%88%EC%B2%9C%EA%B5%AC%20%EB%8F%85%EC%82%B0%EB%8F%99%201081-4"},{"id":56,"name":"온수역(남)","addr":"구로구 온수동 51-26","gu":"구로구","dong":"온수동","type":"노상","cap":41,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EC%98%A8%EC%88%98%EC%97%AD%28%EB%82%A8%29%20%EA%B5%AC%EB%A1%9C%EA%B5%AC%20%EC%98%A8%EC%88%98%EB%8F%99%2051-26"},{"id":57,"name":"당산고가밑","addr":"영등포구 당산동5가 9-15","gu":"영등포구","dong":"","type":"노상","cap":23,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EB%8B%B9%EC%82%B0%EA%B3%A0%EA%B0%80%EB%B0%91%20%EC%98%81%EB%93%B1%ED%8F%AC%EA%B5%AC%20%EB%8B%B9%EC%82%B0%EB%8F%995%EA%B0%80%209-15"},{"id":58,"name":"당산노외","addr":"영등포구 당산동3가 2-1","gu":"영등포구","dong":"","type":"노외","cap":236,"wd":"08:00~21:00","sat":"08:00~21:00","hol":"08:00~21:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EB%8B%B9%EC%82%B0%EB%85%B8%EC%99%B8%20%EC%98%81%EB%93%B1%ED%8F%AC%EA%B5%AC%20%EB%8B%B9%EC%82%B0%EB%8F%993%EA%B0%80%202-1"},{"id":59,"name":"대림노외","addr":"구로구 구로동 120-3 외 8필지","gu":"구로구","dong":"구로동","type":"노외","cap":93,"wd":"09:00~19:00","sat":"09:00~19:00","hol":"09:00~19:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EB%8C%80%EB%A6%BC%EB%85%B8%EC%99%B8%20%EA%B5%AC%EB%A1%9C%EA%B5%AC%20%EA%B5%AC%EB%A1%9C%EB%8F%99%20120-3"},{"id":60,"name":"대림역","addr":"영등포구 대림동 808-24","gu":"영등포구","dong":"대림동","type":"노상","cap":18,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EB%8C%80%EB%A6%BC%EC%97%AD%20%EC%98%81%EB%93%B1%ED%8F%AC%EA%B5%AC%20%EB%8C%80%EB%A6%BC%EB%8F%99%20808-24"},{"id":61,"name":"문래1동","addr":"영등포구 문래동3가 54-12","gu":"영등포구","dong":"","type":"노상","cap":11,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EB%AC%B8%EB%9E%981%EB%8F%99%20%EC%98%81%EB%93%B1%ED%8F%AC%EA%B5%AC%20%EB%AC%B8%EB%9E%98%EB%8F%993%EA%B0%80%2054-12"},{"id":62,"name":"양평동(동)","addr":"영등포구 양평동5가 44-1","gu":"영등포구","dong":"","type":"노상","cap":6,"wd":"09:00~19:00","sat":"09:00~19:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EC%96%91%ED%8F%89%EB%8F%99%28%EB%8F%99%29%20%EC%98%81%EB%93%B1%ED%8F%AC%EA%B5%AC%20%EC%96%91%ED%8F%89%EB%8F%995%EA%B0%80%2044-1"},{"id":63,"name":"동작대교(위)","addr":"서초구 반포동 1333-1","gu":"서초구","dong":"반포동","type":"노상","cap":47,"wd":"12:00~21:00","sat":"12:00~21:00","hol":"12:00~21:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EB%8F%99%EC%9E%91%EB%8C%80%EA%B5%90%28%EC%9C%84%29%20%EC%84%9C%EC%B4%88%EA%B5%AC%20%EB%B0%98%ED%8F%AC%EB%8F%99%201333-1"},{"id":64,"name":"봉천복개3","addr":"관악구 신림동 1467-3","gu":"관악구","dong":"신림동","type":"노상","cap":59,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EB%B4%89%EC%B2%9C%EB%B3%B5%EA%B0%9C3%20%EA%B4%80%EC%95%85%EA%B5%AC%20%EC%8B%A0%EB%A6%BC%EB%8F%99%201467-3"},{"id":65,"name":"여의서로","addr":"영등포구 여의도동 8-1","gu":"영등포구","dong":"여의도동","type":"노상","cap":82,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EC%97%AC%EC%9D%98%EC%84%9C%EB%A1%9C%20%EC%98%81%EB%93%B1%ED%8F%AC%EA%B5%AC%20%EC%97%AC%EC%9D%98%EB%8F%84%EB%8F%99%208-1"},{"id":66,"name":"원효대교 남단","addr":"영등포구 여의도동 5","gu":"영등포구","dong":"여의도동","type":"노상","cap":13,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EC%9B%90%ED%9A%A8%EB%8C%80%EA%B5%90%20%EB%82%A8%EB%8B%A8%20%EC%98%81%EB%93%B1%ED%8F%AC%EA%B5%AC%20%EC%97%AC%EC%9D%98%EB%8F%84%EB%8F%99%205"},{"id":67,"name":"해군본부앞","addr":"영등포구 신길동 812","gu":"영등포구","dong":"신길동","type":"노상","cap":20,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%ED%95%B4%EA%B5%B0%EB%B3%B8%EB%B6%80%EC%95%9E%20%EC%98%81%EB%93%B1%ED%8F%AC%EA%B5%AC%20%EC%8B%A0%EA%B8%B8%EB%8F%99%20812"},{"id":68,"name":"보라매상업","addr":"동작구 신대방동 431-3","gu":"동작구","dong":"신대방동","type":"노외","cap":61,"wd":"09:00~21:00","sat":"09:00~21:00","hol":"09:00~21:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EB%B3%B4%EB%9D%BC%EB%A7%A4%EC%83%81%EC%97%85%20%EB%8F%99%EC%9E%91%EA%B5%AC%20%EC%8B%A0%EB%8C%80%EB%B0%A9%EB%8F%99%20431-3"},{"id":69,"name":"여의도공원","addr":"영등포구 여의도동 2-11","gu":"영등포구","dong":"여의도동","type":"노상","cap":48,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EC%97%AC%EC%9D%98%EB%8F%84%EA%B3%B5%EC%9B%90%20%EC%98%81%EB%93%B1%ED%8F%AC%EA%B5%AC%20%EC%97%AC%EC%9D%98%EB%8F%84%EB%8F%99%202-11"},{"id":70,"name":"동호대교(남)","addr":"강남구 압구정동 435","gu":"강남구","dong":"압구정동","type":"노상","cap":18,"wd":"09:00~19:00","sat":"09:00~19:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EB%8F%99%ED%98%B8%EB%8C%80%EA%B5%90%28%EB%82%A8%29%20%EA%B0%95%EB%82%A8%EA%B5%AC%20%EC%95%95%EA%B5%AC%EC%A0%95%EB%8F%99%20435"},{"id":71,"name":"명일파출소","addr":"강동구 명일동 47-9","gu":"강동구","dong":"명일동","type":"노외","cap":12,"wd":"09:00~20:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EB%AA%85%EC%9D%BC%ED%8C%8C%EC%B6%9C%EC%86%8C%20%EA%B0%95%EB%8F%99%EA%B5%AC%20%EB%AA%85%EC%9D%BC%EB%8F%99%2047-9"},{"id":72,"name":"성내역(잠실나루역)","addr":"송파구 신천동 11-1","gu":"송파구","dong":"신천동","type":"노상","cap":27,"wd":"08:00~18:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EC%84%B1%EB%82%B4%EC%97%AD%20%EC%86%A1%ED%8C%8C%EA%B5%AC%20%EC%8B%A0%EC%B2%9C%EB%8F%99%2011-1"},{"id":73,"name":"압구정고가1","addr":"강남구 신사동 668","gu":"강남구","dong":"신사동","type":"노상","cap":19,"wd":"08:00~21:00","sat":"08:00~21:00","hol":"08:00~21:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EC%95%95%EA%B5%AC%EC%A0%95%EA%B3%A0%EA%B0%801%20%EA%B0%95%EB%82%A8%EA%B5%AC%20%EC%8B%A0%EC%82%AC%EB%8F%99%20668"},{"id":74,"name":"압구정고가2","addr":"강남구 신사동 668","gu":"강남구","dong":"신사동","type":"노상","cap":19,"wd":"08:00~21:00","sat":"08:00~21:00","hol":"08:00~21:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EC%95%95%EA%B5%AC%EC%A0%95%EA%B3%A0%EA%B0%802%20%EA%B0%95%EB%82%A8%EA%B5%AC%20%EC%8B%A0%EC%82%AC%EB%8F%99%20668"},{"id":75,"name":"영동6교밑","addr":"강남구 대치동 512-1","gu":"강남구","dong":"대치동","type":"노상","cap":39,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"09:00~15:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EC%98%81%EB%8F%996%EA%B5%90%EB%B0%91%20%EA%B0%95%EB%82%A8%EA%B5%AC%20%EB%8C%80%EC%B9%98%EB%8F%99%20512-1"},{"id":76,"name":"옥수역","addr":"성동구 옥수동 401-1","gu":"성동구","dong":"옥수동","type":"노상","cap":31,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EC%98%A5%EC%88%98%EC%97%AD%20%EC%84%B1%EB%8F%99%EA%B5%AC%20%EC%98%A5%EC%88%98%EB%8F%99%20401-1"},{"id":77,"name":"일원역","addr":"강남구 일원본동 716-2","gu":"강남구","dong":"일원본동","type":"노외","cap":67,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EC%9D%BC%EC%9B%90%EC%97%AD%20%EA%B0%95%EB%82%A8%EA%B5%AC%20%EC%9D%BC%EC%9B%90%EB%B3%B8%EB%8F%99%20716-2"},{"id":78,"name":"남부여성발전센터","addr":"금천구 시흥동 산139-2","gu":"금천구","dong":"시흥동","type":"노외(시설)","cap":128,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EB%82%A8%EB%B6%80%EC%97%AC%EC%84%B1%EB%B0%9C%EC%A0%84%EC%84%BC%ED%84%B0%20%EA%B8%88%EC%B2%9C%EA%B5%AC%20%EC%8B%9C%ED%9D%A5%EB%8F%99%20%EC%82%B0139-2"},{"id":79,"name":"영남","addr":"영등포구 영등포동4가 123","gu":"영등포구","dong":"","type":"노외(시설)","cap":570,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EC%98%81%EB%82%A8%20%EC%98%81%EB%93%B1%ED%8F%AC%EA%B5%AC%20%EC%98%81%EB%93%B1%ED%8F%AC%EB%8F%994%EA%B0%80%20123"},{"id":80,"name":"남대문화물","addr":"중구 남대문로4가 24-1","gu":"중구","dong":"","type":"노상","cap":9,"wd":"09:00~19:00","sat":"09:00~19:00","hol":"09:00~19:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EB%82%A8%EB%8C%80%EB%AC%B8%ED%99%94%EB%AC%BC%20%EC%A4%91%EA%B5%AC%20%EB%82%A8%EB%8C%80%EB%AC%B8%EB%A1%9C4%EA%B0%80%2024-1"},{"id":81,"name":"소파길노상","addr":"중구 회현동1가 산 1-19","gu":"중구","dong":"","type":"노상","cap":21,"wd":"09:00~21:00","sat":"09:00~21:00","hol":"09:00~21:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EC%86%8C%ED%8C%8C%EA%B8%B8%EB%85%B8%EC%83%81%20%EC%A4%91%EA%B5%AC%20%ED%9A%8C%ED%98%84%EB%8F%991%EA%B0%80%20%EC%82%B0%201-19"},{"id":82,"name":"남산파출소","addr":"중구 회현동1가 147-32","gu":"중구","dong":"","type":"노상","cap":13,"wd":"09:00~21:00","sat":"09:00~21:00","hol":"09:00~21:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EB%82%A8%EC%82%B0%ED%8C%8C%EC%B6%9C%EC%86%8C%20%EC%A4%91%EA%B5%AC%20%ED%9A%8C%ED%98%84%EB%8F%991%EA%B0%80%20147-32"},{"id":83,"name":"동작대교","addr":"용산구 용산동6가 69-11","gu":"용산구","dong":"","type":"노외","cap":88,"wd":"08:00~22:00","sat":"08:00~22:00","hol":"08:00~22:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EB%8F%99%EC%9E%91%EB%8C%80%EA%B5%90%20%EC%9A%A9%EC%82%B0%EA%B5%AC%20%EC%9A%A9%EC%82%B0%EB%8F%996%EA%B5%AC%2069-11"},{"id":84,"name":"남산한옥마을","addr":"중구 필동2가 83-1","gu":"중구","dong":"","type":"노외","cap":16,"wd":"09:00~20:00","sat":"09:00~20:00","hol":"09:00~20:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EB%82%A8%EC%82%B0%ED%95%9C%EC%98%A5%EB%A7%88%EC%9D%84%20%EC%A4%91%EA%B5%AC%20%ED%95%84%EB%8F%992%EA%B0%80%2083-1"},{"id":85,"name":"동국제강","addr":"중구 삼각동 111-1","gu":"중구","dong":"삼각동","type":"노외","cap":13,"wd":"09:00~19:00","sat":"09:00~19:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EB%8F%99%EA%B5%AD%EC%A0%9C%EA%B0%95%20%EC%A4%91%EA%B5%AC%20%EC%82%BC%EA%B0%81%EB%8F%99%20111-1"},{"id":86,"name":"청계1","addr":"종로구 관철동 13-14","gu":"종로구","dong":"관철동","type":"노상","cap":12,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EC%B2%AD%EA%B3%841%20%EC%A2%85%EB%A1%9C%EA%B5%AC%20%EA%B4%80%EC%B2%A0%EB%8F%99%2013-14"},{"id":87,"name":"청계2","addr":"종로구 관수동 91-4","gu":"종로구","dong":"관수동","type":"노상","cap":31,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EC%B2%AD%EA%B3%842%20%EC%A2%85%EB%A1%9C%EA%B5%AC%20%EA%B4%80%EC%88%98%EB%8F%99%2091-4"},{"id":88,"name":"청계3","addr":"종로구 예지동 140-1","gu":"종로구","dong":"예지동","type":"노상","cap":69,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EC%B2%AD%EA%B3%843%20%EC%A2%85%EB%A1%9C%EA%B5%AC%20%EC%98%88%EC%A7%80%EB%8F%99%20140-1"},{"id":89,"name":"청계5","addr":"종로구 종로5가 458-2","gu":"종로구","dong":"","type":"노상","cap":83,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EC%B2%AD%EA%B3%845%20%EC%A2%85%EB%A1%9C%EA%B5%AC%20%EC%A2%85%EB%A1%9C5%EA%B0%80%20458-2"},{"id":90,"name":"청계6","addr":"중구 신당동 217-118","gu":"중구","dong":"신당동","type":"노상","cap":28,"wd":"09:00~익일01:00","sat":"09:00~15:00","hol":"19:00~익일01:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EC%B2%AD%EA%B3%846%20%EC%A4%91%EA%B5%AC%20%EC%8B%A0%EB%8B%B9%EB%8F%99%20217-118"},{"id":91,"name":"청계6-2","addr":"중구 신당동 217-118","gu":"중구","dong":"신당동","type":"노상","cap":6,"wd":"09:00~익일01:00","sat":"09:00~15:00","hol":"19:00~익일01:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EC%B2%AD%EA%B3%846%20%EC%A4%91%EA%B5%AC%20%EC%8B%A0%EB%8B%B9%EB%8F%99%20217-118"},{"id":92,"name":"청계6-3","addr":"중구 신당동 217-118","gu":"중구","dong":"신당동","type":"노상","cap":5,"wd":"09:00~익일01:00","sat":"09:00~15:00","hol":"19:00~익일01:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EC%B2%AD%EA%B3%846%20%EC%A4%91%EA%B5%AC%20%EC%8B%A0%EB%8B%B9%EB%8F%99%20217-118"},{"id":93,"name":"청계6(신평화시장앞)","addr":"중구 신당동 217-118","gu":"중구","dong":"신당동","type":"노상","cap":7,"wd":"09:00~익일01:00","sat":"09:00~15:00","hol":"19:00~익일01:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EC%B2%AD%EA%B3%846%20%EC%A4%91%EA%B5%AC%20%EC%8B%A0%EB%8B%B9%EB%8F%99%20217-118"},{"id":94,"name":"청계7","addr":"종로구 창신동 436-87","gu":"종로구","dong":"창신동","type":"노상","cap":39,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EC%B2%AD%EA%B3%847%20%EC%A2%85%EB%A1%9C%EA%B5%AC%20%EC%B0%BD%EC%8B%A0%EB%8F%99%20436-87"},{"id":95,"name":"돈화문로","addr":"중구 을지로3가 296-24","gu":"중구","dong":"","type":"노상","cap":47,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EB%8F%88%ED%99%94%EB%AC%B8%EB%A1%9C%20%EC%A4%91%EA%B5%AC%20%EC%9D%84%EC%A7%80%EB%A1%9C3%EA%B0%80%20296-24"},{"id":96,"name":"마른내길","addr":"중구 인현동1가 87-8","gu":"중구","dong":"","type":"노상","cap":33,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EB%A7%88%EB%A5%B8%EB%82%B4%EA%B8%B8%20%EC%A4%91%EA%B5%AC%20%EC%9D%B8%ED%98%84%EB%8F%991%EA%B0%80%2087-8"},{"id":97,"name":"배오개길","addr":"중구 예관동 22-1","gu":"중구","dong":"예관동","type":"노상","cap":10,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EB%B0%B0%EC%98%A4%EA%B0%9C%EA%B8%B8%20%EC%A4%91%EA%B5%AC%20%EC%98%88%EA%B4%80%EB%8F%99%2022-1"},{"id":98,"name":"을지로","addr":"중구 을지로3가 282-8","gu":"중구","dong":"","type":"노상","cap":81,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EC%9D%84%EC%A7%80%EB%A1%9C%20%EC%A4%91%EA%B5%AC%20%EC%9D%84%EC%A7%80%EB%A1%9C3%EA%B0%80%20282-8"},{"id":99,"name":"청계8","addr":"동대문구 신설동 109-2","gu":"동대문구","dong":"신설동","type":"노상","cap":106,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EC%B2%AD%EA%B3%848%20%EB%8F%99%EB%8C%80%EB%AC%B8%EA%B5%AC%20%EC%8B%A0%EC%84%A4%EB%8F%99%20109-2"},{"id":100,"name":"청계8가","addr":"중구 흥인동 162-1","gu":"중구","dong":"흥인동","type":"노상","cap":9,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EC%B2%AD%EA%B3%848%EA%B0%80%20%EC%A4%91%EA%B5%AC%20%ED%9D%A5%EC%9D%B8%EB%8F%99%20162-1"},{"id":101,"name":"당고개위","addr":"노원구 상계동 111-567","gu":"노원구","dong":"상계동","type":"노상","cap":22,"wd":"09:00~22:00","sat":"09:00~22:00","hol":"09:00~22:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EB%8B%B9%EA%B3%A0%EA%B0%9C%EC%9C%84%20%EB%85%B8%EC%9B%90%EA%B5%AC%20%EC%83%81%EA%B3%84%EB%8F%99%20111-567"},{"id":102,"name":"도봉로 15길","addr":"강북구 미아동 458-7","gu":"강북구","dong":"미아동","type":"노상","cap":16,"wd":"09:00~18:00","sat":"무료개방","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EB%8F%84%EB%B4%89%EB%A1%9C%2015%EA%B8%B8%20%EA%B0%95%EB%B6%81%EA%B5%AC%20%EB%AF%B8%EC%95%84%EB%8F%99%20458-7"},{"id":103,"name":"도봉산","addr":"도봉구 도봉동 282-26","gu":"도봉구","dong":"도봉동","type":"노외","cap":142,"wd":"08:00~22:00","sat":"08:00~22:00","hol":"08:00~22:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EB%8F%84%EB%B4%89%EC%82%B0%20%EB%8F%84%EB%B4%89%EA%B5%AC%20%EB%8F%84%EB%B4%89%EB%8F%99%20282-26"},{"id":104,"name":"석계역","addr":"노원구 월계동 50-9","gu":"노원구","dong":"월계동","type":"노외","cap":70,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EC%84%9D%EA%B3%84%EC%97%AD%20%EB%85%B8%EC%9B%90%EA%B5%AC%20%EC%9B%94%EA%B3%84%EB%8F%99%2050-9"},{"id":105,"name":"창동역(서)","addr":"도봉구 창동 330","gu":"도봉구","dong":"창동","type":"노외","cap":106,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EC%B0%BD%EB%8F%99%EC%97%AD%28%EC%84%9C%29%20%EB%8F%84%EB%B4%89%EA%B5%AC%20%EC%B0%BD%EB%8F%99%20330"},{"id":106,"name":"반포천","addr":"서초구 반포동 118-3","gu":"서초구","dong":"반포동","type":"노외(시설)","cap":1186,"wd":"24시간","sat":"24시간","hol":"24시간","mode":"24시간","map":"https://map.kakao.com/?q=%EB%B0%98%ED%8F%AC%EC%B2%9C%20%EC%84%9C%EC%B4%88%EA%B5%AC%20%EB%B0%98%ED%8F%AC%EB%8F%99%20118-3"},{"id":107,"name":"관철동","addr":"종로구 관철동 11-4","gu":"종로구","dong":"관철동","type":"노상","cap":7,"wd":"09:00~22:00","sat":"09:00~14:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EA%B4%80%EC%B2%A0%EB%8F%99%20%EC%A2%85%EB%A1%9C%EA%B5%AC%20%EA%B4%80%EC%B2%A0%EB%8F%99%2011-4"},{"id":108,"name":"남산소파길식당","addr":"중구 예장동 8-189","gu":"중구","dong":"예장동","type":"노상","cap":12,"wd":"09:00~21:00","sat":"09:00~21:00","hol":"09:00~21:00","mode":"제한운영","map":"https://map.kakao.com/?q=%EB%82%A8%EC%82%B0%EC%86%8C%ED%8C%8C%EA%B8%B8%EC%8B%9D%EB%8B%B9%20%EC%A4%91%EA%B5%AC%20%EC%98%88%EC%9E%A5%EB%8F%99%208-189"},{"id":109,"name":"마른내로","addr":"중구 오장동 69-3","gu":"중구","dong":"오장동","type":"노상","cap":14,"wd":"09:00~18:00","sat":"무료개방","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EB%A7%88%EB%A5%B8%EB%82%B4%EB%A1%9C%20%EC%A4%91%EA%B5%AC%20%EC%98%A4%EC%9E%A5%EB%8F%99%2069-3"},{"id":110,"name":"청계5가","addr":"중구 을지로6가 17-442","gu":"중구","dong":"","type":"노상","cap":20,"wd":"09:00~19:00","sat":"09:00~15:00","hol":"무료개방","mode":"공휴일무료","map":"https://map.kakao.com/?q=%EC%B2%AD%EA%B3%845%EA%B0%80%20%EC%A4%91%EA%B5%AC%20%EC%9D%84%EC%A7%80%EB%A1%9C6%EA%B0%80%2017-442"}];
+
+function extractGu(addr) {
+  const m = addr.match(/(\S+구)/);
+  return m ? m[1] : '';
+}
+
+function extractDong(addr) {
+  const m = addr.match(/구\s+(\S+?동)(?:\b|\s|\d)/);
+  if (m) {
+    const candidate = m[1];
+    const afterDong = addr.substring(addr.indexOf(candidate) + candidate.length, addr.indexOf(candidate) + candidate.length + 2);
+    if (afterDong.startsWith('로') || afterDong.startsWith('길')) return '';
+    return candidate;
+  }
+  return '';
+}
+
+function match(addr) {
+  const gu = extractGu(addr);
+  const dong = extractDong(addr);
+  if (!gu) return { gu: '', dong: '', dong_match: [], gu_match: [] };
+  const dong_match = dong ? PARKING.filter(p => p.gu === gu && p.dong === dong) : [];
+  const gu_match = PARKING.filter(p => p.gu === gu && !dong_match.includes(p));
+  return { gu, dong, dong_match, gu_match };
+}
+
+function sortLots(lots, prioritize24h) {
+  const order = prioritize24h
+    ? { '24시간': 0, '상시무료': 1, '공휴일무료': 2, '제한운영': 3 }
+    : { '24시간': 1, '상시무료': 1, '공휴일무료': 1, '제한운영': 1 };
+  return [...lots].sort((a, b) => {
+    const oa = order[a.mode] ?? 9;
+    const ob = order[b.mode] ?? 9;
+    if (oa !== ob) return oa - ob;
+    return b.cap - a.cap;
+  });
+}
+
+function lotCard(p, badge) {
+  const cap = p.cap > 0 ? `<span class="lot-cap"><b>${p.cap}</b>면</span>` : '';
+  return `
+    <div class="lot">
+      <div class="lot-head">
+        <div class="lot-name">
+          ${p.name}
+          <span class="match-badge match-${badge}">${badge === 'dong' ? '동일치' : '구일치'}</span>
+        </div>
+        ${cap}
+      </div>
+      <div class="lot-addr">${p.addr}</div>
+      <div class="lot-tags">
+        <span class="tag tag-mode-${p.mode}">${p.mode}</span>
+        <span class="tag tag-type">${p.type}</span>
+      </div>
+      <div class="lot-hours">
+        <span>평일 <b>${p.wd}</b></span>
+        <span>토 <b>${p.sat}</b></span>
+        <span>휴일 <b>${p.hol}</b></span>
+      </div>
+      <a class="lot-map" href="${p.map}" target="_blank" rel="noopener">🗺 카카오맵 열기</a>
+    </div>
+  `;
+}
+
+function visitBlock(addr, idx, opts) {
+  const r = match(addr);
+  const prioritize = opts.only24;
+  const N = opts.topN;
+  const dongLots = sortLots(r.dong_match, prioritize).slice(0, N);
+  const guLots = sortLots(r.gu_match, prioritize).slice(0, Math.max(0, N - dongLots.length));
+  const visitMap = `https://map.kakao.com/?q=${encodeURIComponent(addr)}`;
+
+  let meta = '';
+  if (r.gu) meta += `<b>${r.gu}</b>`;
+  if (r.dong) meta += ` · <b>${r.dong}</b>`;
+  if (!r.gu) meta = '<span style="color:var(--danger)">구 인식 실패 — 직접 검색 필요</span>';
+
+  let body;
+  if (!r.gu) {
+    body = `<div class="no-match">서울시 구가 인식되지 않았습니다</div>`;
+  } else if (dongLots.length === 0 && guLots.length === 0) {
+    body = `<div class="no-match">${r.gu} 내 면제주차장이 목록에 없습니다</div>`;
+  } else {
+    body = '<div class="matches">';
+    dongLots.forEach(p => body += lotCard(p, 'dong'));
+    guLots.forEach(p => body += lotCard(p, 'gu'));
+    body += '</div>';
+  }
+
+  return `
+    <div class="visit-block">
+      <div class="visit-head">
+        <div class="visit-num">${idx + 1}</div>
+        <div class="visit-info">
+          <div class="visit-addr">${addr}</div>
+          <div class="visit-meta">${meta}</div>
+          <div class="visit-actions">
+            <a class="mini-btn" href="${visitMap}" target="_blank" rel="noopener">🗺 방문지 검색</a>
+            <button class="mini-btn copy-btn" data-addr="${addr.replace(/"/g,'&quot;')}">📋 복사</button>
+          </div>
+        </div>
+      </div>
+      ${body}
+    </div>
+  `;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast._t);
+  showToast._t = setTimeout(() => t.classList.remove('show'), 1500);
+}
+
+function run() {
+  const raw = document.getElementById('inputAddr').value;
+  const addrs = raw.split('\n').map(s => s.trim()).filter(Boolean);
+  const opts = {
+    only24: document.getElementById('only24').checked,
+    topN: parseInt(document.getElementById('topN').value, 10),
+  };
+  if (addrs.length === 0) {
+    document.getElementById('output').innerHTML = '';
+    return;
+  }
+  const guCounts = {};
+  let matched = 0;
+  addrs.forEach(a => {
+    const r = match(a);
+    if (r.gu) {
+      guCounts[r.gu] = (guCounts[r.gu] || 0) + 1;
+      if (r.dong_match.length + r.gu_match.length > 0) matched++;
+    }
+  });
+  const summary = `
+    <div class="summary">
+      <div class="summary-row"><span>방문지</span><b>${addrs.length}곳</b></div>
+      <div class="summary-row"><span>매칭 성공</span><b>${matched}곳</b></div>
+      <div class="summary-row"><span>분포</span><b>${Object.entries(guCounts).map(([g,c]) => `${g} ${c}`).join(', ') || '-'}</b></div>
+    </div>
+  `;
+  const blocks = addrs.map((a, i) => visitBlock(a, i, opts)).join('');
+  document.getElementById('output').innerHTML = summary + blocks;
+  document.querySelectorAll('.copy-btn').forEach(b => {
+    b.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(b.dataset.addr); showToast('복사됨'); }
+      catch (e) { showToast('복사 실패'); }
+    });
+  });
+}
+
+document.getElementById('runBtn').addEventListener('click', run);
+document.getElementById('clearBtn').addEventListener('click', () => {
+  document.getElementById('inputAddr').value = '';
+  document.getElementById('output').innerHTML = '';
+});
+document.getElementById('inputAddr').addEventListener('keydown', e => {
+  if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) run();
+});
+document.getElementById('only24').addEventListener('change', () => {
+  if (document.getElementById('output').innerHTML) run();
+});
+document.getElementById('topN').addEventListener('change', () => {
+  if (document.getElementById('output').innerHTML) run();
+});
+</script>
+</body>
+</html>
