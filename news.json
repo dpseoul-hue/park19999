@@ -1,0 +1,64 @@
+{
+  "issues": [
+    {
+      "number": 17,
+      "date": "2026-05-08",
+      "headline_summary": "SQLite가 미국 의회 도서관 추천 저장 형식으로 뽑혔네요, HN에서 595점 찍으며 단순 DB가 국가 아카이빙 표준으로 올라선 거예요. OpenAI Symphony가 오늘 스타 2406개 추가되면서 에이전트 오케스트레이션 주목받고, 반대로 AI 슬롭 때문에 온라인 커뮤니티가 인간 콘텐츠 구분으로 고군분투하는 모습도 보이네요.",
+      "sections": {
+        "headlines": [
+          {
+            "title": "SQLite, 미국 의회 도서관 추천 저장 형식 됐어요",
+            "score": 595,
+            "source": "hn-algolia",
+            "body": "SQLite가 Library of Congress에서 공식 추천 저장 형식으로 선정됐대요. 미국 최대 도서관이 SQLite를 영구 저장용으로 인정하는 거라 화제. HN에서 595점 찍으며 개발 커뮤니티도 들썩."
+          }
+        ],
+        "releases": [
+          {
+            "title": "llama.cpp b8950: Gemma4 파싱 엣지 케이스 테스트 추가",
+            "source": "github-releases",
+            "body": "llama.cpp 새 릴리스 b8950, Gemma4 파싱 엣지 케이스 처리 개선. MacOS 바이너리 업데이트. 기존 시리즈 이어짐."
+          }
+        ],
+        "repos": [
+          {
+            "title": "OpenAI Symphony: Codex 오케스트레이션",
+            "stars_total": 22000,
+            "stars_today": 2406,
+            "source": "github-trending",
+            "body": "OpenAI Symphony가 GitHub 트렌딩 1위, 주간 +2406 스타. 프로젝트를 자율 구현 런으로 바꿔 팀 관리 쉽게. 기존 오픈소스 스펙 업데이트."
+          },
+          {
+            "title": "PageIndex: 벡터 없이 추론 기반 RAG 문서 인덱스",
+            "stars_total": 29000,
+            "stars_today": 953,
+            "source": "github-trending",
+            "body": "VectifyAI의 PageIndex, 벡터 없이 추론으로 RAG 문서 인덱싱. GitHub 오늘 +953 스타. 비개발자도 따라 해볼 만해요."
+          }
+        ],
+        "papers": [
+          {
+            "title": "DeepMind AlphaEvolve: Gemini로 코딩 에이전트 스케일링",
+            "score": 231,
+            "source": "hn-algolia",
+            "body": "DeepMind가 Gemini 기반 코딩 에이전트 AlphaEvolve 발표. 여러 분야에 영향 미치는 스케일링 이야기. HN 231점."
+          },
+          {
+            "title": "Anthropic: Claude 생각을 텍스트로 바꾸는 Natural Language Autoencoders",
+            "score": 147,
+            "source": "hn-algolia",
+            "body": "Anthropic 연구: Claude의 내부 생각을 자연어로 디코딩하는 오토인코더. 모델 생각 과정 텍스트화. HN 147점."
+          }
+        ],
+        "community": [
+          {
+            "title": "AI 슬롭이 온라인 커뮤니티 죽이고 있어요",
+            "score": 341,
+            "source": "hn-algolia",
+            "body": "AI 생성 쓰레기 콘텐츠가 온라인 커뮤니티를 망치고 있다는 글. Reddit·포럼 등에서 AI 슬롭 때문에 퀄리티 떨어진다는 이야기. HN 341점."
+          }
+        ]
+      }
+    }
+  ]
+}

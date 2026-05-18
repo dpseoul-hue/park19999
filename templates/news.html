@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>매일의 AI</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body { background: #f5f5f5; font-family: '맑은 고딕', 'Malgun Gothic', sans-serif; }
+
+    .news-page {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 20px 16px 60px;
+    }
+
+    .nav-bar {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .nav-bar a {
+      font-size: 13px;
+      color: #555;
+      text-decoration: none;
+      padding: 4px 10px;
+      border-radius: 3px;
+      border: 1px solid #ccc;
+    }
+
+    .nav-bar a:hover { background: #eee; }
+
+    .issue-header {
+      margin-bottom: 28px;
+    }
+
+    .issue-number {
+      font-size: 12px;
+      color: #888;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .issue-date {
+      font-size: 15px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    .issue-summary {
+      font-size: 13px;
+      line-height: 1.8;
+      color: #444;
+      background: #fff;
+      border-left: 3px solid #666;
+      padding: 12px 16px;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .section {
+      margin-bottom: 32px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #ddd;
+      letter-spacing: 0.5px;
+    }
+
+    .item {
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 4px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+    }
+
+    .item-title {
+      font-size: 13px;
+      font-weight: bold;
+      color: #222;
+      margin-bottom: 6px;
+      line-height: 1.5;
+    }
+
+    .item-meta {
+      font-size: 11px;
+      color: #888;
+      margin-bottom: 6px;
+    }
+
+    .item-meta .badge {
+      display: inline-block;
+      background: #f0f0f0;
+      border: 1px solid #ddd;
+      padding: 1px 6px;
+      border-radius: 10px;
+      margin-right: 4px;
+    }
+
+    .item-meta .score {
+      color: #c0392b;
+      font-weight: bold;
+    }
+
+    .item-body {
+      font-size: 12px;
+      color: #555;
+      line-height: 1.7;
+    }
+
+    .stars-badge {
+      color: #e67e22;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <div class="news-page">
+    <div class="nav-bar">
+      <a href="/">← 일정표</a>
+    </div>
+
+    {% for issue in issues %}
+    <div class="issue-header">
+      <div class="issue-number">매일의 AI · № {{ issue.number }}</div>
+      <div class="issue-date">{{ issue.date }}</div>
+      <div class="issue-summary">{{ issue.headline_summary }}</div>
+    </div>
+
+    {% if issue.sections.headlines %}
+    <div class="section">
+      <div class="section-title">🔥 오늘의 헤드라인</div>
+      {% for item in issue.sections.headlines %}
+      <div class="item">
+        <div class="item-title">{{ item.title }}</div>
+        <div class="item-meta">
+          <span class="badge">{{ item.source }}</span>
+          {% if item.score %}<span class="score">HN {{ item.score }}점</span>{% endif %}
+        </div>
+        <div class="item-body">{{ item.body }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if issue.sections.releases %}
+    <div class="section">
+      <div class="section-title">🚀 릴리스 · 신모델</div>
+      {% for item in issue.sections.releases %}
+      <div class="item">
+        <div class="item-title">{{ item.title }}</div>
+        <div class="item-meta">
+          <span class="badge">{{ item.source }}</span>
+        </div>
+        <div class="item-body">{{ item.body }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if issue.sections.repos %}
+    <div class="section">
+      <div class="section-title">🛠️ 핫 레포</div>
+      {% for item in issue.sections.repos %}
+      <div class="item">
+        <div class="item-title">{{ item.title }}</div>
+        <div class="item-meta">
+          <span class="badge">{{ item.source }}</span>
+          {% if item.stars_today %}
+          <span class="stars-badge">⭐ 오늘 +{{ "{:,}".format(item.stars_today) }}</span>
+          {% endif %}
+          {% if item.stars_total %}
+          <span>/ 총 {{ "{:,}".format(item.stars_total) }}</span>
+          {% endif %}
+        </div>
+        <div class="item-body">{{ item.body }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if issue.sections.papers %}
+    <div class="section">
+      <div class="section-title">📄 주목할 페이퍼</div>
+      {% for item in issue.sections.papers %}
+      <div class="item">
+        <div class="item-title">{{ item.title }}</div>
+        <div class="item-meta">
+          <span class="badge">{{ item.source }}</span>
+          {% if item.score %}<span class="score">HN {{ item.score }}점</span>{% endif %}
+        </div>
+        <div class="item-body">{{ item.body }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if issue.sections.community %}
+    <div class="section">
+      <div class="section-title">💬 커뮤니티 반응</div>
+      {% for item in issue.sections.community %}
+      <div class="item">
+        <div class="item-title">{{ item.title }}</div>
+        <div class="item-meta">
+          <span class="badge">{{ item.source }}</span>
+          {% if item.score %}<span class="score">HN {{ item.score }}점</span>{% endif %}
+        </div>
+        <div class="item-body">{{ item.body }}</div>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% endfor %}
+  </div>
+</body>
+</html>
