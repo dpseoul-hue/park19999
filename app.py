@@ -4,6 +4,7 @@ from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
 DATA_FILE = os.path.join(os.path.dirname(__file__), 'data.json')
+NEWS_FILE = os.path.join(os.path.dirname(__file__), 'news.json')
 
 
 def load_data():
@@ -14,6 +15,13 @@ def load_data():
 def save_data(data):
     with open(DATA_FILE, 'w', encoding='utf-8') as f:
         json.dump(data, f, ensure_ascii=False, indent=2)
+
+
+@app.route('/news')
+def news():
+    with open(NEWS_FILE, 'r', encoding='utf-8') as f:
+        data = json.load(f)
+    return render_template('news.html', issues=data['issues'])
 
 
 @app.route('/')
