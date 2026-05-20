@@ -17,6 +17,11 @@ def save_data(data):
         json.dump(data, f, ensure_ascii=False, indent=2)
 
 
+@app.route('/reference')
+def reference():
+    return render_template('reference.html')
+
+
 @app.route('/news')
 def news():
     with open(NEWS_FILE, 'r', encoding='utf-8') as f:

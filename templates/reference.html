@@ -1,0 +1,1410 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>방문실태확인원 레퍼런스 · 2026.2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;600;700;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+  :root {
+    --bg: #0b0e13;
+    --bg-2: #11151c;
+    --card: #161b24;
+    --card-2: #1c222d;
+    --border: #232a36;
+    --border-2: #2d3543;
+    --text: #e6edf3;
+    --text-2: #9ba6b4;
+    --text-3: #6c7684;
+    --gold: #d4a85a;
+    --gold-soft: #b8923f;
+    --blue: #5b9bd5;
+    --red: #e06c75;
+    --green: #7ec699;
+    --gray: #8b949e;
+    --amber: #e0a64f;
+  }
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overscroll-behavior: none;
+  }
+  .mono { font-family: 'DM Mono', monospace; letter-spacing: -0.01em; }
+
+  /* HEADER */
+  header {
+    padding: 24px 18px 18px;
+    border-bottom: 1px solid var(--border);
+    background: linear-gradient(180deg, #0e1218 0%, var(--bg) 100%);
+    position: sticky; top: 0; z-index: 100;
+    backdrop-filter: blur(8px);
+    background: rgba(11,14,19,0.92);
+  }
+  .brand-row {
+    display: flex; align-items: baseline; gap: 10px;
+    margin-bottom: 6px;
+  }
+  .brand-mark {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; letter-spacing: 0.18em;
+    color: var(--gold);
+    border: 1px solid var(--gold-soft);
+    padding: 2px 7px;
+    border-radius: 2px;
+  }
+  .brand-issue {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--text-3);
+    letter-spacing: 0.05em;
+  }
+  h1 {
+    font-size: 21px; font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+  .subtitle {
+    font-size: 12px; color: var(--text-2);
+    margin-top: 4px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.02em;
+  }
+
+  /* TAB NAV */
+  nav.tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    position: sticky; top: 0; z-index: 99;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  nav.tabs::-webkit-scrollbar { display: none; }
+  .tab-btn {
+    flex: 1 0 auto;
+    min-width: 25%;
+    padding: 14px 8px;
+    background: transparent;
+    border: none;
+    color: var(--text-2);
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 13px; font-weight: 500;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s ease;
+    position: relative;
+  }
+  .tab-btn .num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; color: var(--text-3);
+    display: block; margin-bottom: 2px;
+  }
+  .tab-btn.active {
+    color: var(--gold);
+    border-bottom-color: var(--gold);
+  }
+  .tab-btn.active .num { color: var(--gold-soft); }
+
+  /* CONTENT */
+  main { padding: 20px 16px 80px; }
+  .section { display: none; }
+  .section.active { display: block; animation: fadeIn 0.25s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* SECTION HEADERS */
+  .sec-title {
+    font-size: 13px; font-weight: 700;
+    color: var(--gold);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 24px 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+    font-family: 'DM Mono', monospace;
+  }
+  .sec-title:first-child { margin-top: 0; }
+
+  /* CARDS */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 14px;
+    margin-bottom: 10px;
+  }
+  .card-title {
+    font-size: 14px; font-weight: 600;
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-body {
+    font-size: 13.5px; color: var(--text);
+    line-height: 1.65;
+  }
+  .card-body p { margin-bottom: 6px; }
+  .card-body p:last-child { margin-bottom: 0; }
+
+  /* BADGES */
+  .badge {
+    display: inline-flex; align-items: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; font-weight: 500;
+    padding: 2px 7px; border-radius: 3px;
+    letter-spacing: 0.04em;
+    border: 1px solid;
+  }
+  .b-blue { color: var(--blue); border-color: rgba(91,155,213,0.4); background: rgba(91,155,213,0.08); }
+  .b-red { color: var(--red); border-color: rgba(224,108,117,0.4); background: rgba(224,108,117,0.08); }
+  .b-green { color: var(--green); border-color: rgba(126,198,153,0.4); background: rgba(126,198,153,0.08); }
+  .b-gray { color: var(--gray); border-color: rgba(139,148,158,0.4); background: rgba(139,148,158,0.08); }
+  .b-gold { color: var(--gold); border-color: rgba(212,168,90,0.4); background: rgba(212,168,90,0.08); }
+  .b-amber { color: var(--amber); border-color: rgba(224,166,79,0.4); background: rgba(224,166,79,0.08); }
+
+  /* FLOW DIAGRAM */
+  .flow-row {
+    display: flex; gap: 6px; flex-wrap: wrap;
+    margin: 10px 0;
+  }
+  .flow-step {
+    flex: 1 1 0; min-width: 90px;
+    background: var(--card-2);
+    border: 1px solid var(--border-2);
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-size: 12px;
+    text-align: center;
+    position: relative;
+  }
+  .flow-step .step-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    margin-bottom: 2px;
+  }
+  .flow-step .step-text {
+    font-size: 12px; font-weight: 500;
+  }
+
+  /* DEFINITION TABLE */
+  .def-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .def-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    border-radius: 6px;
+    padding: 10px 12px;
+  }
+  .def-item.t-blue { border-left-color: var(--blue); }
+  .def-item.t-red { border-left-color: var(--red); }
+  .def-item.t-green { border-left-color: var(--green); }
+  .def-item.t-gray { border-left-color: var(--gray); }
+  .def-head {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 4px;
+  }
+  .def-name { font-size: 14px; font-weight: 700; }
+  .def-desc { font-size: 12.5px; color: var(--text-2); }
+  .def-action {
+    margin-top: 6px; padding-top: 6px;
+    border-top: 1px dashed var(--border-2);
+    font-size: 12px; color: var(--text);
+  }
+  .def-action::before {
+    content: "→ ";
+    color: var(--gold);
+    font-weight: 700;
+  }
+
+  /* SCHEDULE TABLE */
+  .schedule {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .sch-row {
+    display: grid;
+    grid-template-columns: 90px 1fr;
+    border-bottom: 1px solid var(--border);
+    padding: 10px 12px;
+    align-items: start;
+  }
+  .sch-row:last-child { border-bottom: none; }
+  .sch-time {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px; color: var(--gold);
+    font-weight: 500;
+  }
+  .sch-task { font-size: 13px; }
+  .sch-task .task-name {
+    font-weight: 600; margin-bottom: 2px;
+  }
+  .sch-task .task-detail {
+    font-size: 12px; color: var(--text-2);
+  }
+
+  /* CHECKLIST */
+  .check-group {
+    margin-bottom: 14px;
+  }
+  .check-head {
+    font-size: 13px; font-weight: 600;
+    color: var(--gold);
+    margin-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .check-head .icon {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    background: rgba(212,168,90,0.12);
+    border: 1px solid var(--gold-soft);
+    width: 22px; height: 22px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 4px; color: var(--gold);
+  }
+  .check-list {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px 0;
+  }
+  .check-item {
+    display: flex; gap: 10px;
+    padding: 8px 14px;
+    font-size: 13px;
+    line-height: 1.5;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.1s;
+  }
+  .check-item:last-child { border-bottom: none; }
+  .check-item:active { background: var(--card-2); }
+  .check-item .box {
+    flex-shrink: 0;
+    width: 16px; height: 16px;
+    border: 1.5px solid var(--text-3);
+    border-radius: 3px;
+    margin-top: 3px;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .check-item.checked .box {
+    background: var(--gold);
+    border-color: var(--gold);
+  }
+  .check-item.checked .box::after {
+    content: "";
+    position: absolute;
+    left: 4px; top: 0px;
+    width: 4px; height: 9px;
+    border: solid var(--bg);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+  }
+  .check-item.checked .text {
+    color: var(--text-3);
+    text-decoration: line-through;
+  }
+  .check-item .text { flex: 1; }
+
+  /* WARNING BOX */
+  .warning {
+    background: rgba(224,108,117,0.06);
+    border: 1px solid rgba(224,108,117,0.3);
+    border-left: 3px solid var(--red);
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin: 10px 0;
+    font-size: 12.5px;
+  }
+  .warning-title {
+    color: var(--red);
+    font-weight: 700;
+    font-size: 12px;
+    margin-bottom: 4px;
+    letter-spacing: 0.04em;
+  }
+  .info {
+    background: rgba(91,155,213,0.06);
+    border: 1px solid rgba(91,155,213,0.3);
+    border-left: 3px solid var(--blue);
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin: 10px 0;
+    font-size: 12.5px;
+  }
+  .info-title {
+    color: var(--blue);
+    font-weight: 700;
+    font-size: 12px;
+    margin-bottom: 4px;
+    letter-spacing: 0.04em;
+  }
+
+  /* SITUATION CARDS */
+  .sit-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .sit-head {
+    background: var(--card-2);
+    padding: 12px 14px;
+    cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    user-select: none;
+  }
+  .sit-head:active { background: var(--border); }
+  .sit-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px; color: var(--gold);
+    background: rgba(212,168,90,0.1);
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-right: 10px;
+    border: 1px solid var(--gold-soft);
+    flex-shrink: 0;
+  }
+  .sit-title {
+    font-size: 14px; font-weight: 600;
+    flex: 1;
+  }
+  .sit-toggle {
+    color: var(--text-3);
+    font-family: 'DM Mono', monospace;
+    font-size: 16px;
+    transition: transform 0.2s;
+  }
+  .sit-card.open .sit-toggle { transform: rotate(45deg); }
+  .sit-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  .sit-card.open .sit-body { max-height: 2000px; }
+  .sit-content {
+    padding: 14px;
+    border-top: 1px solid var(--border);
+  }
+  .sit-block {
+    margin-bottom: 12px;
+  }
+  .sit-block:last-child { margin-bottom: 0; }
+  .sit-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .sit-label::before {
+    content: "";
+    width: 12px; height: 1px;
+    background: var(--gold);
+  }
+  .sit-text {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text);
+  }
+  .sit-quote {
+    background: var(--bg-2);
+    border-left: 2px solid var(--gold-soft);
+    padding: 8px 10px;
+    margin: 6px 0;
+    font-size: 12.5px;
+    color: var(--text-2);
+    border-radius: 0 4px 4px 0;
+  }
+  .sit-quote .speaker {
+    font-weight: 700;
+    color: var(--gold);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    margin-right: 6px;
+  }
+
+  /* INFO ROWS (FOR LISTS) */
+  .info-list {
+    list-style: none;
+  }
+  .info-list li {
+    position: relative;
+    padding-left: 16px;
+    margin-bottom: 4px;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  .info-list li::before {
+    content: "·";
+    color: var(--gold);
+    position: absolute;
+    left: 4px;
+    font-weight: 700;
+  }
+  .info-list li strong {
+    color: var(--gold);
+    font-weight: 600;
+  }
+
+  /* DATA TABLES */
+  .data-table {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 10px 0;
+  }
+  .dt-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    border-bottom: 1px solid var(--border);
+    padding: 10px 12px;
+    font-size: 13px;
+    align-items: start;
+    gap: 10px;
+  }
+  .dt-row:last-child { border-bottom: none; }
+  .dt-label {
+    color: var(--text-2);
+    font-size: 12px;
+  }
+  .dt-value {
+    font-family: 'DM Mono', monospace;
+    font-size: 12.5px;
+    color: var(--gold);
+    text-align: right;
+  }
+  .dt-value.text {
+    font-family: 'Noto Sans KR', sans-serif;
+    color: var(--text);
+    font-size: 13px;
+  }
+
+  /* ROLE GRID */
+  .role-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin: 10px 0;
+  }
+  .role-cell {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-top: 2px solid var(--gold);
+    padding: 10px 8px;
+    text-align: center;
+    border-radius: 4px;
+  }
+  .role-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  .role-name {
+    font-size: 13px; font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .role-desc {
+    font-size: 11px; color: var(--text-2);
+    line-height: 1.4;
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: var(--text-3);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    border-top: 1px solid var(--border);
+    margin-top: 20px;
+  }
+
+  /* TYPOGRAPHY HELPERS */
+  .em-gold { color: var(--gold); font-weight: 600; }
+  .em-red { color: var(--red); font-weight: 600; }
+  .em-blue { color: var(--blue); }
+  .small { font-size: 12px; color: var(--text-2); }
+  .tiny { font-size: 11px; color: var(--text-3); }
+
+  /* ANCHOR LINK STYLE */
+  .anchor-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .anchor-btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 10px 8px;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 11.5px;
+    color: var(--text-2);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .anchor-btn:active {
+    background: var(--card-2);
+    color: var(--gold);
+    border-color: var(--gold-soft);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand-row">
+    <span class="brand-mark">NTS · 25반</span>
+    <span class="brand-issue">2026.02 · v1</span>
+  </div>
+  <h1>방문실태확인원 레퍼런스</h1>
+  <div class="subtitle">서울지방국세청 체납관리단 · 가이드북 압축본</div>
+</header>
+
+<nav class="tabs">
+  <button class="tab-btn active" data-tab="summary"><span class="num">01</span>핵심요약</button>
+  <button class="tab-btn" data-tab="check"><span class="num">02</span>체크리스트</button>
+  <button class="tab-btn" data-tab="situation"><span class="num">03</span>상황카드</button>
+  <button class="tab-btn" data-tab="new"><span class="num">04</span>신규/변경</button>
+</nav>
+
+<main>
+
+<!-- ============ TAB 1: SUMMARY ============ -->
+<section class="section active" id="summary">
+
+  <div class="sec-title">업무 흐름</div>
+  <div class="card">
+    <div class="card-body">
+      <div class="flow-row">
+        <div class="flow-step">
+          <div class="step-label">01</div>
+          <div class="step-text">사전안내<br><span class="tiny">전화실태확인원</span></div>
+        </div>
+        <div class="flow-step">
+          <div class="step-label">02</div>
+          <div class="step-text">실태확인<br><span class="tiny">전화 / 방문</span></div>
+        </div>
+        <div class="flow-step">
+          <div class="step-label">03</div>
+          <div class="step-text">유형분류<br><span class="tiny">체납담당공무원</span></div>
+        </div>
+      </div>
+      <p class="small" style="margin-top:6px">실태확인원은 <span class="em-gold">정보 제공</span>까지. 유형분류는 체납담당공무원이 내부정보 결합해 결정.</p>
+    </div>
+  </div>
+
+  <div class="sec-title">체납자 4유형</div>
+  <div class="def-grid">
+    <div class="def-item t-blue">
+      <div class="def-head">
+        <span class="def-name">일시적 납부곤란자</span>
+        <span class="badge b-blue">TYPE 1</span>
+      </div>
+      <div class="def-desc">일시적 어려움(부도·재난·질병 등)으로 납부 곤란하나, 납부의지 있고 사업 정상화로 징수 가능한 자</div>
+      <div class="def-action">강제징수·행정제재 보류, 분납 유도 / 탄력적 강제징수(국징법 §105②)</div>
+    </div>
+    <div class="def-item t-red">
+      <div class="def-head">
+        <span class="def-name">고의적 납부기피자</span>
+        <span class="badge b-red">TYPE 2</span>
+      </div>
+      <div class="def-desc">납부능력 있으나 거부 또는 재산 타인명의 이전. <strong style="color:var(--red)">고액·상습체납자</strong>: 3회 이상 체납 + 1년 경과 + 2억원 이상</div>
+      <div class="def-action">가택수색, 압류·공매, 사해행위 소송, 고발, 추적조사</div>
+    </div>
+    <div class="def-item t-green">
+      <div class="def-head">
+        <span class="def-name">생계 곤란형 체납자</span>
+        <span class="badge b-green">TYPE 3</span>
+      </div>
+      <div class="def-desc">무재산·최저생계비 이하 소득자. 압류금지재산만 보유 또는 재산 없음</div>
+      <div class="def-action">복지연계, 납부의무 소멸 검토</div>
+    </div>
+    <div class="def-item t-gray">
+      <div class="def-head">
+        <span class="def-name">기타</span>
+        <span class="badge b-gray">TYPE 4</span>
+      </div>
+      <div class="def-desc">단순 무납부(체납사실 미인지) / 행방불명자(폐가·주민자치센터 주소)</div>
+      <div class="def-action">체납사실·납부방법 안내</div>
+    </div>
+  </div>
+
+  <div class="sec-title">유형분류 판단기준 5</div>
+  <div class="card">
+    <ul class="info-list">
+      <li><strong>생활실태</strong> · 호화사치 여부 → 추적조사·복지연계 필요성</li>
+      <li><strong>납부의지</strong> · 체납사유·납부계획 → 곤란 vs 기피</li>
+      <li><strong>재산·소득</strong> · 징수가능성 → 추적조사 필요성</li>
+      <li><strong>재산변동</strong> · 체납 전·후 은닉 여부</li>
+      <li><strong>체납규모</strong> · 3억 기준 지방청(이상) / 세무서(미만)</li>
+    </ul>
+  </div>
+
+  <div class="sec-title">하루 일과</div>
+  <div class="schedule">
+    <div class="sch-row">
+      <div class="sch-time">10:00</div>
+      <div class="sch-task">
+        <div class="task-name">출근</div>
+        <div class="task-detail">출근 보고 · 출장지 파악 · 출근부 서명</div>
+      </div>
+    </div>
+    <div class="sch-row">
+      <div class="sch-time">10:00–10:10</div>
+      <div class="sch-task">
+        <div class="task-name">실태확인 준비</div>
+        <div class="task-detail">팀별 동선·일정 확정</div>
+      </div>
+    </div>
+    <div class="sch-row">
+      <div class="sch-time">10:10–16:30</div>
+      <div class="sch-task">
+        <div class="task-name">실태확인 실시</div>
+        <div class="task-detail">방문상담·납부안내·실태확인표 작성·신청서 수령</div>
+      </div>
+    </div>
+    <div class="sch-row">
+      <div class="sch-time">12:00–13:00</div>
+      <div class="sch-task">
+        <div class="task-name">점심 (변경 시 보고)</div>
+        <div class="task-detail">변경되면 일정표에 표기</div>
+      </div>
+    </div>
+    <div class="sch-row">
+      <div class="sch-time">16:30–17:00</div>
+      <div class="sch-task">
+        <div class="task-name">정리</div>
+        <div class="task-detail">실태확인표·실적·일정표·운행일지 정리</div>
+      </div>
+    </div>
+  </div>
+  <div class="info" style="margin-top:8px">
+    <div class="info-title">근무 조건</div>
+    주 5일 · 1일 6시간 (10–17시, 점심 1h 제외) · 결근/지각/조퇴/외출 모두 <strong>사전 행정지원인력시스템 결재</strong> 필수. 결근 당일 사후승인 안 하면 무단결근.
+  </div>
+
+  <div class="sec-title">3인 1조 역할</div>
+  <div class="role-grid">
+    <div class="role-cell">
+      <div class="role-num">01</div>
+      <div class="role-name">상담요원</div>
+      <div class="role-desc">체납자와 상담 진행</div>
+    </div>
+    <div class="role-cell">
+      <div class="role-num">02</div>
+      <div class="role-name">실태확인표</div>
+      <div class="role-desc">주거환경 파악 + 작성</div>
+    </div>
+    <div class="role-cell">
+      <div class="role-num">03</div>
+      <div class="role-name">비상대비</div>
+      <div class="role-desc">필요시 동영상 촬영 / 위험상황 대응</div>
+    </div>
+  </div>
+  <div class="warning">
+    <div class="warning-title">이동 전 필수 파악</div>
+    사람 많은 대로변 등 <strong>대피로 동선</strong> · 인근 <strong>경찰서/파출소 연락처</strong>
+  </div>
+
+  <div class="sec-title">방문 절차 5단계</div>
+  <div class="card">
+    <ul class="info-list">
+      <li><strong>① 주소지 이동</strong> · 부유층 거주지·고가주택·고급승용차 확인</li>
+      <li><strong>② 신분 확인</strong> · 성명·생년월일 조합 / 실태확인원증 제시 / 방문 목적 설명</li>
+      <li><strong>③ 내부 진입</strong> · 인테리어·옷차림·고가품·가구·가전 파악</li>
+      <li><strong>④ 질문 청취</strong> · 체납사실·납부의사·체납사유·거주·재산·소득·애로사항</li>
+      <li><strong>⑤ 납부안내</strong> · 가상계좌/홈택스 안내 (직접 수납 절대 금지)</li>
+    </ul>
+  </div>
+  <div class="warning">
+    <div class="warning-title">절대 금지</div>
+    수색·조사권 행사 (국세공무원 전용) / 실태확인원 직접 현금 수납 / 종합의견란 체납자 노출
+  </div>
+
+  <div class="sec-title">부재 시</div>
+  <div class="card">
+    <div class="card-body">
+      <p>방문안내문을 <span class="em-gold">우편봉투에 밀봉</span> → 체납자 이름 기재 → 봉투 겉면 "부재로 인하여 전달합니다" → 우편함 투입.</p>
+      <p class="small" style="margin-top:6px"><strong style="color:var(--red)">체납안내문(체납내역 기재)은 절대 투입 X</strong> — 방문안내문만.</p>
+      <p class="small">집주인/인근 거주자에게 거주여부 확인 시 <strong>조끼 벗고 3인 중 1인</strong>이. 체납사실 누설 금지.</p>
+    </div>
+  </div>
+
+  <div class="sec-title">주요 세목 요약</div>
+  <div class="data-table">
+    <div class="dt-row">
+      <div class="dt-label">부가가치세 (개인)</div>
+      <div class="dt-value">2회: 1·7월</div>
+    </div>
+    <div class="dt-row">
+      <div class="dt-label">부가가치세 (법인)</div>
+      <div class="dt-value">4회: 1·4·7·10월</div>
+    </div>
+    <div class="dt-row">
+      <div class="dt-label">종합소득세</div>
+      <div class="dt-value">5.31 / 분납 1천만↑</div>
+    </div>
+    <div class="dt-row">
+      <div class="dt-label">양도소득세 예정신고</div>
+      <div class="dt-value">양도일 말일 +2월</div>
+    </div>
+    <div class="dt-row">
+      <div class="dt-label">법인세</div>
+      <div class="dt-value">사업연도 종료 +3월</div>
+    </div>
+    <div class="dt-row">
+      <div class="dt-label">종합부동산세</div>
+      <div class="dt-value">12.15 / 분납 250만↑</div>
+    </div>
+  </div>
+
+</section>
+
+
+<!-- ============ TAB 2: CHECKLIST ============ -->
+<section class="section" id="check">
+
+  <div class="info">
+    <div class="info-title">사용법</div>
+    항목 탭하면 체크 표시. 페이지 새로고침 시 초기화. 매일 출근 전·방문 전·종료 후 확인용.
+  </div>
+
+  <div class="check-group">
+    <div class="check-head"><span class="icon">A</span>출근 직후</div>
+    <div class="check-list">
+      <div class="check-item"><div class="box"></div><div class="text">출근부 서명</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">근무복(조끼) 착용</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">실태확인원증 패용</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">전화실태확인원에게서 체납자 명단·실태확인표·체납안내문 수령</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">팀별 출장지 동선·일정 확정 (10분 내)</div></div>
+    </div>
+  </div>
+
+  <div class="check-group">
+    <div class="check-head"><span class="icon">B</span>방문 직전</div>
+    <div class="check-list">
+      <div class="check-item"><div class="box"></div><div class="text">3인 역할 분담 (상담/작성/대비) 확정</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">대피로 동선 파악 (대로변·인파)</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">인근 경찰서/파출소 연락처 확인</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">우편함 우편물로 거주여부 사전 확인</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">주소지 특성·고가주택·고급승용차 외관 파악</div></div>
+    </div>
+  </div>
+
+  <div class="check-group">
+    <div class="check-head"><span class="icon">C</span>대면 시</div>
+    <div class="check-list">
+      <div class="check-item"><div class="box"></div><div class="text">신분 확인 (성명+생년월일 조합)</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">실태확인원증 제시</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">방문 목적 설명: "독촉 아님, 상담·정리 도움"</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">체납안내문 본인 직접 전달</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">상담 중 자연스럽게 8개 항목 청취</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">실태확인표 작성 (종합의견란 체납자 노출 금지)</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">납부 희망 시 가상계좌·홈택스 안내 (직접 수납 X)</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">분납 희망 시 체납담당공무원 연결 안내</div></div>
+    </div>
+  </div>
+
+  <div class="check-group">
+    <div class="check-head"><span class="icon">D</span>부재 시</div>
+    <div class="check-list">
+      <div class="check-item"><div class="box"></div><div class="text">방문안내문을 우편봉투에 밀봉</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">봉투에 체납자 이름 기재</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">봉투 겉면 "부재로 인하여 전달합니다" 표시</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">체납안내문(체납내역 기재)은 절대 투입 X</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">우편함 투입</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">거주여부 확인 시 조끼 벗고 1인만, 체납사실 누설 X</div></div>
+    </div>
+  </div>
+
+  <div class="check-group">
+    <div class="check-head"><span class="icon">E</span>종료 후 (16:30–17:00)</div>
+    <div class="check-list">
+      <div class="check-item"><div class="box"></div><div class="text">일정표 작성 (도착·상담·출발 시간)</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">차량 운행일지 작성 (킬로수·사고유무)</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">납부의무 소멸 신청서 → 운영담당자 인계</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">복지연계신청서 + 실태확인표 → 전화실태확인원 인계</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">방문상담(실태확인) 보고서 → 지방청 운영담당자</div></div>
+    </div>
+  </div>
+
+  <div class="sec-title">개인정보 절대원칙</div>
+  <div class="warning">
+    <div class="warning-title">가족이라도 본인 외 노출 금지</div>
+    배우자·자녀·부모·형제 모두 해당. 체납사실·납세정보·체납액 일체 누설 금지.
+  </div>
+  <div class="check-group">
+    <div class="check-list">
+      <div class="check-item"><div class="box"></div><div class="text">체납자 본인이 아니면 어떤 정보도 제공하지 않는다</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">제3자 통화 시 "국세청에서 방문" 정도만 안내</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">본인 휴대폰을 알려주는지 여부는 제3자 결정에 맡긴다</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">USB·노트북·서면 분실 즉시 사용부서장 보고</div></div>
+      <div class="check-item"><div class="box"></div><div class="text">주민번호 뒷자리는 마스킹(*) 처리</div></div>
+    </div>
+  </div>
+
+  <div class="sec-title">처벌 기준</div>
+  <div class="data-table">
+    <div class="dt-row">
+      <div class="dt-label">국세징수법 §116<br><span class="tiny">실태조사 자료 누설·목적 외 사용</span></div>
+      <div class="dt-value text" style="color:var(--red)">2천만원 이하 과태료</div>
+    </div>
+    <div class="dt-row">
+      <div class="dt-label">개인정보보호법 §71<br><span class="tiny">동의 없이 제3자 제공/누설</span></div>
+      <div class="dt-value text" style="color:var(--red)">5년↓ 또는 5천만원↓</div>
+    </div>
+    <div class="dt-row">
+      <div class="dt-label">개인정보보호법 §72<br><span class="tiny">직무상 비밀 누설/목적 외 이용</span></div>
+      <div class="dt-value text" style="color:var(--red)">3년↓ 또는 3천만원↓</div>
+    </div>
+  </div>
+
+  <div class="sec-title">의무사항</div>
+  <div class="card">
+    <ul class="info-list">
+      <li><strong>성실·품위</strong> · 비밀 엄수, 친절·공정, 근무지 이탈 X</li>
+      <li><strong>청렴</strong> · 직무관련 사례·증여·향응 금지 (직간접·상하 모두)</li>
+      <li><strong>겸직금지</strong> · 다른 사업장 취업·자영업 금지</li>
+      <li><strong>제척·기피</strong> · 친·인척·지인 시 본인 회피</li>
+      <li><strong>복장</strong> · 조끼 + 실태확인원증 + 안전장비</li>
+      <li><strong>병가</strong> · 진료 영수증 제출, 병가기간 무급</li>
+      <li><strong>공가</strong> · 예비군 훈련만 유급</li>
+      <li><strong>연차</strong> · 1개월 개근 시 1일(6h) 부여</li>
+      <li><strong>시용기간</strong> · 3개월, 종합 70점 미만 시 본채용 거부 가능</li>
+    </ul>
+  </div>
+
+</section>
+
+
+<!-- ============ TAB 3: SITUATION CARDS ============ -->
+<section class="section" id="situation">
+
+  <div class="info">
+    <div class="info-title">사용법</div>
+    상황 카드 탭하면 핵심 멘트와 대응 펼쳐짐. 가이드북 참고7 압축본.
+  </div>
+
+  <!-- 상황 1 -->
+  <div class="sit-card">
+    <div class="sit-head">
+      <span class="sit-num">01</span>
+      <div class="sit-title">기본 상황 · 납부불가</div>
+      <span class="sit-toggle">+</span>
+    </div>
+    <div class="sit-body"><div class="sit-content">
+      <div class="sit-block">
+        <div class="sit-label">관찰 포인트</div>
+        <div class="sit-text">낡은 옷, 청결 불량, 주방 설거지·소주병 → 생계 곤란 시그널</div>
+      </div>
+      <div class="sit-block">
+        <div class="sit-label">핵심 멘트</div>
+        <div class="sit-quote"><span class="speaker">확인원</span>"독촉 아닙니다. 납부가 어려운 이유와 생활실태를 확인해 정리하는데 도움드리려고 방문했습니다."</div>
+      </div>
+      <div class="sit-block">
+        <div class="sit-label">처리</div>
+        <div class="sit-text">복지연계 의사 확인 → 신청 시 신청서 수령. 본인이 거부하면 그대로 종료, 강요 X.</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- 상황 2 -->
+  <div class="sit-card">
+    <div class="sit-head">
+      <span class="sit-num">02</span>
+      <div class="sit-title">분납 희망</div>
+      <span class="sit-toggle">+</span>
+    </div>
+    <div class="sit-body"><div class="sit-content">
+      <div class="sit-block">
+        <div class="sit-label">관찰 포인트</div>
+        <div class="sit-text">단정한 옷차림, 사업·가게 운영, 일시적 자금경색</div>
+      </div>
+      <div class="sit-block">
+        <div class="sit-label">핵심 멘트</div>
+        <div class="sit-quote"><span class="speaker">확인원</span>"분납 가능하도록 도와드립니다. 체납안내문에 있는 체납담당공무원이 직접 전화드리도록 조치하겠습니다."</div>
+      </div>
+      <div class="sit-block">
+        <div class="sit-label">주의</div>
+        <div class="sit-text">분납 가능여부·금액 결정은 체납담당공무원 권한. 실태확인원이 약속 X.</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- 상황 3 -->
+  <div class="sit-card">
+    <div class="sit-head">
+      <span class="sit-num">03</span>
+      <div class="sit-title">생계 곤란 · 복지연계</div>
+      <span class="sit-toggle">+</span>
+    </div>
+    <div class="sit-body"><div class="sit-content">
+      <div class="sit-block">
+        <div class="sit-label">관찰 포인트</div>
+        <div class="sit-text">건강 악화, 전기·수도 체납, 단기 일용직, 쾌쾌한 냄새</div>
+      </div>
+      <div class="sit-block">
+        <div class="sit-label">핵심 멘트</div>
+        <div class="sit-quote"><span class="speaker">확인원</span>"생계가 어려우시면 자치단체 복지부서에 연결해드립니다. 신청하시겠어요?"</div>
+      </div>
+      <div class="sit-block">
+        <div class="sit-label">처리</div>
+        <div class="sit-text">복지연계신청서 + 개인정보 수집·이용 및 제3자 제공 동의서 수령. 복지위기알림(앱) 등록은 운영담당자 또는 현장 직접 입력.</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- 상황 4 -->
+  <div class="sit-card">
+    <div class="sit-head">
+      <span class="sit-num">04</span>
+      <div class="sit-title">고의적 납부기피 의심</div>
+      <span class="sit-toggle">+</span>
+    </div>
+    <div class="sit-body"><div class="sit-content">
+      <div class="sit-block">
+        <div class="sit-label">관찰 포인트</div>
+        <div class="sit-text">고급 주택단지, 명품 의상, 골프백, 고가 인테리어. "사업 망함" 주장하나 배우자가 부담.</div>
+      </div>
+      <div class="sit-block">
+        <div class="sit-label">핵심 질문</div>
+        <div class="sit-quote"><span class="speaker">확인원</span>"수입이 없으신데 배우자분이 사업을 크게 하시나 보네요. 생활비는 배우자분이 부담하시는 거죠?"</div>
+      </div>
+      <div class="sit-block">
+        <div class="sit-label">처리</div>
+        <div class="sit-text">실태확인표 종합의견란에 <strong style="color:var(--red)">고의적 납부기피 의심</strong>으로 분류. 배우자 명의 부동산 등 추적조사 필요성 메모. 체납담당공무원 분석 회부.</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- 상황 5 -->
+  <div class="sit-card">
+    <div class="sit-head">
+      <span class="sit-num">05</span>
+      <div class="sit-title">집안 상담 거부</div>
+      <span class="sit-toggle">+</span>
+    </div>
+    <div class="sit-body"><div class="sit-content">
+      <div class="sit-block">
+        <div class="sit-label">대응</div>
+        <div class="sit-quote"><span class="speaker">확인원</span>"집안이 불편하시면 밖에 상담 가능한 장소로 이동해도 괜찮습니다. 근처 공터로 이동하시죠."</div>
+      </div>
+      <div class="sit-block">
+        <div class="sit-label">참고</div>
+        <div class="sit-text">제3자 영향 받지 않는 단둘 상담이 원칙. 외부 이동도 동일하게 적용.</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- 상황 6 -->
+  <div class="sit-card">
+    <div class="sit-head">
+      <span class="sit-num">06</span>
+      <div class="sit-title">제3자 대면 (본인 부재)</div>
+      <span class="sit-toggle">+</span>
+    </div>
+    <div class="sit-body"><div class="sit-content">
+      <div class="sit-block">
+        <div class="sit-label">대응 1단계</div>
+        <div class="sit-text">"국세청에서 방문했다고만" 전달 부탁. 체납사실은 절대 누설 X.</div>
+      </div>
+      <div class="sit-block">
+        <div class="sit-label">통화 연결되면</div>
+        <div class="sit-quote"><span class="speaker">확인원</span>"통화로 드릴 말씀이 아니라서 다시 댁으로 방문드리겠습니다. 언제 가능하실까요?"</div>
+      </div>
+      <div class="sit-block">
+        <div class="sit-label">번호 안 알려주면</div>
+        <div class="sit-text">강요 X. 체납안내문(연락처)을 제3자에게 전달 부탁하고 종료.</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- 상황 7 -->
+  <div class="sit-card">
+    <div class="sit-head">
+      <span class="sit-num">07</span>
+      <div class="sit-title">전원 부재 (거주는 함)</div>
+      <span class="sit-toggle">+</span>
+    </div>
+    <div class="sit-body"><div class="sit-content">
+      <div class="sit-block">
+        <div class="sit-label">절차</div>
+        <div class="sit-text">우편함에 최근 우편물 있음 → 거주 확인. 벨 3회 이상 + 노크 → 부재 확정.</div>
+      </div>
+      <div class="sit-block">
+        <div class="sit-label">처리</div>
+        <div class="sit-text">방문안내문(밀봉, 이름 기재, "부재로 인하여 전달") 우편함 투입 후 종료.</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- 상황 8 -->
+  <div class="sit-card">
+    <div class="sit-head">
+      <span class="sit-num">08</span>
+      <div class="sit-title">비거주 의심 (행방불명)</div>
+      <span class="sit-toggle">+</span>
+    </div>
+    <div class="sit-body"><div class="sit-content">
+      <div class="sit-block">
+        <div class="sit-label">시그널</div>
+        <div class="sit-text">우편물 오래되거나 없음. 응답 없음.</div>
+      </div>
+      <div class="sit-block">
+        <div class="sit-label">확인 방법 (아파트)</div>
+        <div class="sit-text">조끼 벗고 1인만, 옛 직장동료/지인으로 가장. "아직 여기 사나요?" 정도만.</div>
+      </div>
+      <div class="sit-block">
+        <div class="sit-label">처리</div>
+        <div class="sit-text">행방불명 의심으로 보고. 종합의견란에 비거주 메모.</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- 상황 9 -->
+  <div class="sit-card">
+    <div class="sit-head">
+      <span class="sit-num">09</span>
+      <div class="sit-title">폭언</div>
+      <span class="sit-toggle">+</span>
+    </div>
+    <div class="sit-body"><div class="sit-content">
+      <div class="sit-block">
+        <div class="sit-label">초기 대응</div>
+        <div class="sit-quote"><span class="speaker">확인원</span>"화나시더라도 욕설은 자제 부탁드립니다. 도움드리려고 방문한 것입니다."</div>
+      </div>
+      <div class="sit-block">
+        <div class="sit-label">계속 욕설 시</div>
+        <div class="sit-text">확인원 1인 휴대폰으로 동영상 촬영(녹음 포함) 시작.</div>
+      </div>
+      <div class="sit-block">
+        <div class="sit-label">통제 불가 시</div>
+        <div class="sit-text">"대화가 되지 않을 것 같으니 돌아가겠습니다" → 즉시 이탈. 따라오면 인파 많은 곳으로 + 경찰 신고. 종료 후 지방청 운영담당자 보고.</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- 상황 10 -->
+  <div class="sit-card">
+    <div class="sit-head">
+      <span class="sit-num">10</span>
+      <div class="sit-title">위협 / 폭력 발생</div>
+      <span class="sit-toggle">+</span>
+    </div>
+    <div class="sit-body"><div class="sit-content">
+      <div class="sit-block">
+        <div class="sit-label">즉시 조치</div>
+        <div class="sit-quote"><span class="speaker">확인원</span>"지금 행동은 폭행죄에 해당될 수 있어, 계속 이러시면 경찰에 신고하겠습니다."</div>
+      </div>
+      <div class="sit-block">
+        <div class="sit-label">동시 진행</div>
+        <div class="sit-text">즉시 1인 휴대폰 동영상(녹음 포함) 촬영. 무력 동원 시 동의 불필요.</div>
+      </div>
+      <div class="sit-block">
+        <div class="sit-label">대피</div>
+        <div class="sit-text">진정 안 되면 즉시 이탈. 따라오며 위협 시 경찰 신고 + 인파 많은 곳. 출동 시까지 회피.</div>
+      </div>
+      <div class="sit-block">
+        <div class="sit-label">사후</div>
+        <div class="sit-text">지방청 운영담당자 보고 후 필요 조치(진단서·경찰 진술 등).</div>
+      </div>
+    </div></div>
+  </div>
+
+  <div class="sec-title">상담 거부 극복 5단계</div>
+  <div class="card">
+    <ul class="info-list">
+      <li><strong>① 관계 유지</strong> · No 받아들이지 말기 / 거절 신호 안 주기 / 침묵 금기 / 표정·제스처 자제</li>
+      <li><strong>② 적극 청취</strong> · 몸짓·표정 읽기 / 끼어들지 X / 입장에서 이해</li>
+      <li><strong>③ 거절 요점 파악</strong> · 손가락 톡톡(동의 X·지루) / 주먹(분노) / 주머니(불신) / 미소 중단(흥미 상실)</li>
+      <li><strong>④ 대답 준비</strong> · 짧고 간결, 친절한 말투</li>
+      <li><strong>⑤ 적절한 대답</strong> · 상대 수준에 맞는 쉬운 말, 생소한 용어 회피</li>
+    </ul>
+  </div>
+
+  <div class="sec-title">화난 상대 진정 6요령</div>
+  <div class="card">
+    <ul class="info-list">
+      <li>휴식 · 장소 변경 (몇 분~며칠)</li>
+      <li>조용히 듣기 · 흥분 가라앉을 때까지</li>
+      <li>주제 바꾸기 · 근거 약한 분노일 때</li>
+      <li>사과 · 근거 있는 분노일 때 솔직하게</li>
+      <li>조금 양보 · 다른 방법 다 안 되었을 때만</li>
+      <li>다른 사람에게 부탁 · 공무원 도움 요청</li>
+    </ul>
+  </div>
+
+  <div class="sec-title">라포 형성</div>
+  <div class="card">
+    <ul class="info-list">
+      <li><strong>메라비언</strong> · 시각 55% / 청각 38% / 언어 7% (비언어 우위)</li>
+      <li><strong>미러링</strong> · 상대 행동을 거울처럼 반영</li>
+      <li><strong>백트레킹</strong> · 상대 말 중요 부분 반복</li>
+      <li><strong>페이싱</strong> · 호흡·말 속도·자세 맞추기</li>
+      <li><strong>자기 공개</strong> · 본인 약점 먼저 공개 → 경계 낮춤</li>
+      <li><strong>1·2·3 법칙</strong> · 1분 말하고 / 2분 듣고 / 3분 맞장구</li>
+    </ul>
+  </div>
+
+</section>
+
+
+<!-- ============ TAB 4: NEW/CHANGED ============ -->
+<section class="section" id="new">
+
+  <div class="info">
+    <div class="info-title">2026.2판 주요 신규/강화 사항</div>
+    복지위기알림 앱 연계 절차, 복지연계신청서 별지 신설, 2025년 기초생활·긴급복지 기준 갱신.
+  </div>
+
+  <div class="sec-title">복지위기알림(앱) 등록 절차</div>
+  <div class="card">
+    <div class="card-body">
+      <p style="margin-bottom:8px"><span class="em-gold">현장 직접 입력 가능</span>. 운영담당자 취합 입력이 기본이나 실태확인원 현장 등록도 허용.</p>
+      <ul class="info-list">
+        <li>회원가입 → 휴대폰 인증</li>
+        <li>개인정보 수집·이용 동의</li>
+        <li><strong>유형 선택 시 "업무 유관자"</strong> ← 중요</li>
+        <li><strong>"업무유관자 기타" 체크 + "국세체납관리단" 입력</strong> ← 중요</li>
+        <li>알림통지 방식: <strong>이메일</strong> 체크 + 지방청 운영담당자 이메일 기재 (결과 회신 목적)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="warning">
+    <div class="warning-title">절대 체크 금지</div>
+    "익명알림" 체크 X — 체크하면 결과 회신 안 옴.
+  </div>
+
+  <div class="sec-title">위기상황 등록 (이웃 알림)</div>
+  <div class="card">
+    <ol class="info-list" style="counter-reset:n">
+      <li><strong>위기상황 선택</strong> · 생계/돌봄/건강/일상/안전/주거/일자리/아동/채무·법률/고립·고독</li>
+      <li><strong>가구 유형</strong> · 독거/한부모/다문화/노인부부/북한이탈/다자녀/조손/장애/소년소녀/미혼모부/일반/기타</li>
+      <li><strong>대상자 정보</strong> · 성별·이름·연령대·연락처·주소</li>
+      <li><strong>알림내용</strong> · 복지연계신청서의 신청사유와 동일하게 입력</li>
+      <li><strong>지방청 담당자 정보</strong> · 익명알림 X / 이메일 통지 / 지방청 총괄 이메일 기재</li>
+      <li><strong>개인정보 제공 동의 → 알림하기</strong></li>
+    </ol>
+  </div>
+
+  <div class="sec-title">복지연계 처리 흐름</div>
+  <div class="card">
+    <div class="flow-row">
+      <div class="flow-step">
+        <div class="step-label">①</div>
+        <div class="step-text">위기상황 발견<br><span class="tiny">실태확인원 → 운영담당자</span></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-label">②</div>
+        <div class="step-text">앱 등록<br><span class="tiny">행복이음 자동매칭</span></div>
+      </div>
+    </div>
+    <div class="flow-row">
+      <div class="flow-step">
+        <div class="step-label">③</div>
+        <div class="step-text">지자체 배정·서비스 제공<br><span class="tiny">상담·복지서비스</span></div>
+      </div>
+      <div class="flow-step">
+        <div class="step-label">④</div>
+        <div class="step-text">결과 입력·관리<br><span class="tiny">NTIS GF04</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-title">NTIS 시스템 코드</div>
+  <div class="data-table">
+    <div class="dt-row">
+      <div class="dt-label">복지연계신청서 + 동의서<br><span class="tiny">전자서고 필수 첨부</span></div>
+      <div class="dt-value">GF03</div>
+    </div>
+    <div class="dt-row">
+      <div class="dt-label">복지 연계 결과<br><span class="tiny">접수번호·처리결과 입력</span></div>
+      <div class="dt-value">GF04</div>
+    </div>
+  </div>
+
+  <div class="sec-title">복지연계 결과 조회 방법</div>
+  <div class="card">
+    <ul class="info-list">
+      <li><strong>이메일</strong> · '알림통지 방식'에 입력한 이메일로 통보</li>
+      <li><strong>앱</strong> · 복지위기알림 → '알림 이력' → 결과 조회</li>
+      <li><strong>NTIS 입력</strong> · GF04에서 접수번호·처리결과 상세내역 전산 입력</li>
+    </ul>
+  </div>
+
+  <div class="sec-title">2025년 기초생활보장 선정기준 (1인)</div>
+  <div class="data-table">
+    <div class="dt-row">
+      <div class="dt-label">생계급여</div>
+      <div class="dt-value">765,444원</div>
+    </div>
+    <div class="dt-row">
+      <div class="dt-label">의료급여</div>
+      <div class="dt-value">956,805원</div>
+    </div>
+    <div class="dt-row">
+      <div class="dt-label">주거급여</div>
+      <div class="dt-value">1,148,166원</div>
+    </div>
+    <div class="dt-row">
+      <div class="dt-label">교육급여</div>
+      <div class="dt-value">1,196,007원</div>
+    </div>
+  </div>
+  <div class="warning">
+    <div class="warning-title">생계급여 부양의무자 기준</div>
+    1촌 혈족(배우자 포함) 연소득 1.3억 또는 재산 12억 초과 시 보장 불가.
+  </div>
+
+  <div class="sec-title">긴급복지 지원 기준</div>
+  <div class="data-table">
+    <div class="dt-row">
+      <div class="dt-label">소득 (1인)</div>
+      <div class="dt-value">중위 75% / 1,794,010</div>
+    </div>
+    <div class="dt-row">
+      <div class="dt-label">소득 (4인)</div>
+      <div class="dt-value">4,573,330</div>
+    </div>
+    <div class="dt-row">
+      <div class="dt-label">대도시 재산</div>
+      <div class="dt-value">2.41억–3.10억↓</div>
+    </div>
+    <div class="dt-row">
+      <div class="dt-label">금융재산 (1인)</div>
+      <div class="dt-value">8,392,000↓</div>
+    </div>
+  </div>
+
+  <div class="sec-title">긴급복지 주요 지원 (4인)</div>
+  <div class="data-table">
+    <div class="dt-row">
+      <div class="dt-label">생계 (월·6회까지)</div>
+      <div class="dt-value">1,872,700</div>
+    </div>
+    <div class="dt-row">
+      <div class="dt-label">의료 (2회까지)</div>
+      <div class="dt-value">3,000,000↓</div>
+    </div>
+    <div class="dt-row">
+      <div class="dt-label">주거 대도시 (12회까지)</div>
+      <div class="dt-value">662,500↓</div>
+    </div>
+    <div class="dt-row">
+      <div class="dt-label">복지시설 (6회까지)</div>
+      <div class="dt-value">1,494,100↓</div>
+    </div>
+    <div class="dt-row">
+      <div class="dt-label">연료비 (10–3월 6회)</div>
+      <div class="dt-value">월 150,000</div>
+    </div>
+    <div class="dt-row">
+      <div class="dt-label">장제비 (1회)</div>
+      <div class="dt-value">800,000</div>
+    </div>
+    <div class="dt-row">
+      <div class="dt-label">단전 시 전기료</div>
+      <div class="dt-value">500,000↓</div>
+    </div>
+  </div>
+
+  <div class="sec-title">주요 복지 연계기관 14</div>
+  <div class="card">
+    <ul class="info-list">
+      <li><strong>장애인</strong> · 장애인고용공단(취업) / 국민연금공단(서비스지원)</li>
+      <li><strong>의료취약</strong> · 국립암센터 / 보건소 / 지방의료원</li>
+      <li><strong>금융</strong> · 금융감독원(불법사금융) / 서민금융진흥원</li>
+      <li><strong>취업</strong> · 고용복지+센터 / 근로복지공단(산재)</li>
+      <li><strong>주거</strong> · LH(저소득층 주거지원)</li>
+      <li><strong>아동·정신</strong> · 아동보호전문기관 / 정신건강복지센터</li>
+      <li><strong>피해자</strong> · 경찰청 / 병무청(사회복무·병역감면)</li>
+    </ul>
+  </div>
+
+  <div class="sec-title">민원 자주 묻는 질문 핵심답변</div>
+  <div class="card">
+    <ul class="info-list">
+      <li><strong>"왜 사전 예고 없이?"</strong> · 전화번호 미확보로 부득이. 양해 요청 + 분납 상담 안내.</li>
+      <li><strong>"고지서 못 받았다"</strong> · 발송 사실 확인 + 체납담당공무원 연락처 제공.</li>
+      <li><strong>"가산금 억울"</strong> · 고지서 뒷면에 명시. 독촉고지서까지만 법적 의무, 이후 안내문은 의무 X.</li>
+      <li><strong>"완납했다"</strong> · 실시간 연계로 미수납 확인. 납부영수증 제출이 원칙.</li>
+      <li><strong>"부과 자체 이의"</strong> · 체납담당공무원에게 상세 상담 안내.</li>
+      <li><strong>"개인정보 열람 가능?"</strong> · 강제징수·민감정보 X, 활동에 필요한 최소 정보만. §116 2천만원 처벌 강조.</li>
+      <li><strong>"공무원 아닌데 왜?"</strong> · 국세청 고용 공무 중 / 단순·반복 보조 업무 / 비밀유지 보안각서 + 상시 모니터링.</li>
+      <li><strong>"이름 크게 부름"</strong> · 호수 못 찾아 발생, 사과 + 재발 방지.</li>
+      <li><strong>"제3자 발설했다"</strong> · 부재 시에도 가족 포함 누설 금지 원칙 재확인 + 사과.</li>
+      <li><strong>"비거주인데 반복 방문"</strong> · 실거주자 확인 안 되어 재방문. 향후 비거주 분류 약속.</li>
+    </ul>
+  </div>
+
+  <div class="sec-title">현장 절대 금지 5</div>
+  <div class="warning">
+    <ul class="info-list" style="margin-top:4px">
+      <li>실태확인원 직접 <strong>현금 수납</strong> (홈택스/가상계좌 안내만)</li>
+      <li>수색·조사권 행사 (국세공무원 전용)</li>
+      <li>가족이라도 본인 외 <strong>납세정보 노출</strong></li>
+      <li>체납안내문(체납내역 기재) 우편함 투입</li>
+      <li>실태확인표 종합의견란을 체납자에게 노출</li>
+    </ul>
+  </div>
+
+</section>
+
+</main>
+
+<footer>
+  NTS · DELINQUENCY MGMT · TEAM 25 · INTERNAL USE ONLY
+</footer>
+
+<script>
+  // Tab switching
+  const tabs = document.querySelectorAll('.tab-btn');
+  const sections = document.querySelectorAll('.section');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.tab;
+      tabs.forEach(t => t.classList.remove('active'));
+      sections.forEach(s => s.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(target).classList.add('active');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    });
+  });
+
+  // Checkbox toggle
+  document.querySelectorAll('.check-item').forEach(item => {
+    item.addEventListener('click', () => {
+      item.classList.toggle('checked');
+    });
+  });
+
+  // Situation card collapse
+  document.querySelectorAll('.sit-head').forEach(head => {
+    head.addEventListener('click', () => {
+      head.parentElement.classList.toggle('open');
+    });
+  });
+</script>
+
+</body>
+</html>
