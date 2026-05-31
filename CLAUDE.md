@@ -50,3 +50,15 @@ Each entry in `data.visits` has:
 ## Print Behaviour
 
 The toolbar (print button) and all form controls are hidden in print via `.no-print`. The `.remark-text` `<span>` (which mirrors the selected remark value) is shown only in print via `.print-only`. Ensure any new editable UI follows this same pattern.
+
+## 대화 코드 (Conversation Codes)
+
+사용자가 아래 코드를 사용하면 해당 방식으로 응답한다. 모든 대화는 기본적으로 한국어로 진행한다.
+
+| 코드 | 동작 |
+|------|------|
+| `/ghost` | 실제 사람이 쓴 것처럼 자연스럽게 작성하기 |
+| `ARTIFACTS` | 대시보드, 웹사이트 등 바로 쓸 수 있는 결과물로 만들기 |
+| `OODA` | 관찰 → 판단 → 결정 → 실행 순서로 전략적으로 분석하기 |
+| `L99` | 전문가 수준으로 깊게 분석하기 |
+| `/godmode` | 최고 수준의 추론과 전략으로 답변하기 |
